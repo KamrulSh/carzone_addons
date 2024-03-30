@@ -1,0 +1,433 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    
+    <!-- This View Contain Details of Exam Session
+-->    <record id="university_exam_view_tree" model="ir.ui.view">
+        <field name="name">university.exam.tree</field>
+        <field name="model">university.exam</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="exam_type_id"/>
+                <field name="course_id"/>
+                <field name="batch_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="university_exam_view_form" model="ir.ui.view">
+        <field name="name">university.exam.view.form</field>
+        <field name="model">university.exam</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                    <button name="action_held"
+                            string="Held"
+                            type="object"
+                            class="btn-primary"
+                            states="draft"
+                            />
+                     <button name="action_done"
+                            string="Done"
+                            type="object"
+                            class="btn-primary"
+                            states="held"
+                            />
+                     <field name="state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="start_date" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="course_id" required="1" attrs="{'readonly':[('state','=','done')]}" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="exam_type_id" attrs="{'readonly':[('state','=','done')]}" options="{'no_create': True, 'no_edit': True}"/>
+
+                        </group>
+                        <group>
+                            <field name="code" required="1" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="end_date" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="batch_id" domain="[('course_id', '=', course_id)]" attrs="{'readonly':[('state','=','done')]}" options="{'no_create': True, 'no_edit': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Exam">
+                            <field name="exam_ids" attrs="{'readonly':[('state','=','done')]}">
+                                <tree>
+                                    <field name="session_id" invisible="1"/>
+                                    <field name="subject_id"/>
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="state"/>
+                                    <field name="total_marks"/>
+                                    <field name="pass_marks"/>
+                                </tree>
+                                <form>
+                                     <header>
+                                        <button name="action_held"
+                                                string="Held"
+                                                type="object"
+                                                class="btn-primary"
+                                                states="draft"
+                                                />
+                                         <button name="action_upload"
+                                                string="Upload"
+                                                type="object"
+                                                class="btn-primary"
+                                                states="held"
+                                                />
+                                         <button name="action_done"
+                                                string="Done"
+                                                type="object"
+                                                class="btn-primary"
+                                                states="upload"
+                                                />
+                                         <field name="state" widget="statusbar" readonly="1"/>
+                                    </header>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="session_id" readonly="1" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="course_id" invisible="1"/>
+                                                <field name="batch_id" invisible="1"/>
+                                                <field name="subject_id" domain="[('course_ids', '=', course_id)]" required="1" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','done')]}"/>
+                                                <field name="start_date" attrs="{'readonly':[('state','=','done')]}"/>
+                                                <field name="total_marks" attrs="{'readonly':[('state','=','done')]}"/>
+                                            </group>
+                                            <group>
+                                                <field name="name" attrs="{'readonly':[('state','=','done')]}"/>
+                                                <field name="end_date" attrs="{'readonly':[('state','=','done')]}"/>
+                                                <field name="pass_marks" attrs="{'readonly':[('state','=','done')]}"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page string="Attendance">
+                                                <field name="attendance_ids" attrs="{'readonly':[('state','=','done')]}">
+                                                    <tree editable="bottom">
+                                                        <field name="exam_id" invisible="1" options="{'no_create': True, 'no_edit': True}"/>
+                                                        <field name="course_id" invisible="1"/>
+                                                        <field name="batch_id" invisible="1"/>
+                                                        <field name="student_id" required="1" domain="[('course_id', '=', course_id),('active', '=', True)]" options="{'no_create': True, 'no_edit': True}"/>
+                                                        <field name="state"/>
+                                                        <field name="marks"/>
+                                                        <field name="remarks"/>
+                                                    </tree>
+                                                    <form>
+                                                        <sheet>
+                                                            <group>
+                                                                <group>
+                                                                    <field name="exam_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                                    <field name="student_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                                    <field name="state"/>
+                                                                </group>
+                                                                <group>
+                                                                    <field name="marks"/>
+                                                                    <field name="remarks"/>
+                                                                </group>
+                                                            </group>
+                                                        </sheet>
+                                                    </form>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                                        <group string="Remarks">
+                                            <field name="remarks" nolabel="1" attrs="{'readonly':[('state','=','done')]}"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+
+                            </field>
+                        </page>
+                        <page string="Hall Ticket Details">
+                            <field name="hall_ticket_ids" attrs="{'readonly':[('state','=','done')]}">
+                                <tree editable="bottom">
+                                    <field name="session_id" invisible="1"/>
+                                    <field name="course_id" invisible="1"/>
+                                    <field name="batch_id" invisible="1"/>
+                                    <field name="student_id" required="1" domain="[('course_id', '=', course_id),('active', '=', True)]" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="name"/>
+                                    <field name="center_id" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="block_id" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="room_id" options="{'no_create': True, 'no_edit': True}"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="session_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="student_id" required="1" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="name"/>
+                                            </group>
+                                            <group>
+                                                <field name="center_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="block_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="room_id" options="{'no_create': True, 'no_edit': True}"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="university_exam_view_search" model="ir.ui.view">
+        <field name="name">university.exam.search</field>
+        <field name="model">university.exam</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="exam_type_id"/>
+                <field name="course_id"/>
+                <field name="batch_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_course_id" string="Course" context="{'group_by':'course_id'}"/>
+                    <filter name="group_by_batch_id" string="Batch" context="{'group_by':'batch_id'}"/>
+                    <filter name="group_by_exam_type_id" string="Exam Type" context="{'group_by':'exam_type_id'}"/>
+                    <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_university_exam" model="ir.actions.act_window">
+        <field name="name">Exam Session</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">university.exam</field>
+        <field name="view_mode">tree,search,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Records not available. Let's create admission!
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="sub_menu_university_exam" name="Exam" parent="main_menu_exam" sequence="1"/>
+
+    <menuitem id="menu_university_exam" name="Exam Session" parent="sub_menu_university_exam" sequence="1" action="action_university_exam"/>
+    
+        <!-- This Details Contain Exam Details-->
+    
+    <record id="exam_exam_view_tree" model="ir.ui.view">
+        <field name="name">exam.exam.tree</field>
+        <field name="model">exam.exam</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="session_id"/>
+                <field name="subject_id"/>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="state"/>
+                <field name="total_marks"/>
+                <field name="pass_marks"/>
+            </tree>
+        </field>
+    </record>
+    <record id="exam_exam_view_form" model="ir.ui.view">
+        <field name="name">exam.exam.view.form</field>
+        <field name="model">exam.exam</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                    <button name="action_held"
+                            string="Held"
+                            type="object"
+                            class="btn-primary"
+                            states="draft"
+                            />
+                     <button name="action_upload"
+                            string="Upload"
+                            type="object"
+                            class="btn-primary"
+                            states="held"
+                            />
+                     <button name="action_done"
+                            string="Done"
+                            type="object"
+                            class="btn-primary"
+                            states="upload"
+                            />
+                     <field name="state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id" required="1" domain="[('state','!=','done')]" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="course_id" invisible="1"/>
+                            <field name="batch_id" invisible="1"/>
+                            <field name="subject_id" domain="[('course_ids', '=', course_id)]" required="1" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="start_date" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="total_marks" attrs="{'readonly':[('state','=','done')]}"/>
+                        </group>
+                        <group>
+                            <field name="name" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="end_date" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="pass_marks" attrs="{'readonly':[('state','=','done')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Attendance">
+                            <field name="attendance_ids" attrs="{'readonly':[('state','=','done')]}">
+                                <tree editable="bottom">
+                                    <field name="exam_id" invisible="1"/>
+                                    <field name="course_id" invisible="1"/>
+                                    <field name="batch_id" invisible="1"/>
+                                    <field name="student_id" required="1" domain="[('course_id', '=', course_id),('active', '=', True)]" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="state"/>
+                                    <field name="marks"/>
+                                    <field name="remarks"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="exam_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="student_id" options="{'no_create': True, 'no_edit': True}"/>
+                                                <field name="state"/>
+                                            </group>
+                                            <group>
+                                                <field name="marks"/>
+                                                <field name="remarks"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group string="Remarks">
+                        <field name="remarks" nolabel="1" attrs="{'readonly':[('state','=','done')]}"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="exam_exam_view_search" model="ir.ui.view">
+        <field name="name">exam.exam.search</field>
+        <field name="model">exam.exam</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="session_id"/>
+                <field name="subject_id"/>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_session_id" string="Exam Session" context="{'group_by':'session_id'}"/>
+                    <filter name="group_by_subject_id" string="Subject" context="{'group_by':'subject_id'}"/>
+                    <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_exam_exam" model="ir.actions.act_window">
+        <field name="name">Exam</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">exam.exam</field>
+        <field name="view_mode">tree,search,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Records not available. Let's create Student!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_exam_exam" name="Exam" parent="sub_menu_university_exam" sequence="4" action="action_exam_exam"/>
+
+          <!-- This Details Contain Exam Attendance Details-->
+
+    <record id="exam_attendance_view_tree" model="ir.ui.view">
+        <field name="name">exam.attendance.tree</field>
+        <field name="model">exam.attendance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="exam_id"/>
+                <field name="student_id"/>
+                <field name="state"/>
+                <field name="marks"/>
+                <field name="remarks"/>
+            </tree>
+        </field>
+    </record>
+    <record id="exam_attendance_view_form" model="ir.ui.view">
+        <field name="name">exam.attendance.view.form</field>
+        <field name="model">exam.attendance</field>
+        <field name="arch" type="xml">
+            <form>
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="exam_id" domain="[('state','!=','done')]" options="{'no_create': True, 'no_edit': True}"/>
+                             <field name="course_id" invisible="1"/>
+                            <field name="batch_id" invisible="1"/>
+                            <field name="student_id" required="1" domain="[('course_id', '=', course_id),('active', '=', True)]" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="marks"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="exam_attendance_view_search" model="ir.ui.view">
+        <field name="name">exam.attendance.search</field>
+        <field name="model">exam.attendance</field>
+        <field name="arch" type="xml">
+            <search>
+                 <field name="exam_id"/>
+                <field name="student_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_exam_id" string="Exam" context="{'group_by':'exam_id'}"/>
+                    <filter name="group_by_student_id" string="Student" context="{'group_by':'student_id'}"/>
+                    <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_exam_attendance" model="ir.actions.act_window">
+        <field name="name">Exam Attendance</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">exam.attendance</field>
+        <field name="view_mode">tree,search,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Records not available. Let's create Student!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_exam_attendance" name="Exam Attendance" parent="sub_menu_university_exam" sequence="5" action="action_exam_attendance"/>
+</odoo>

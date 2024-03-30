@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template inherit_id="of_account_statement.report_customer_overdue_temp" id="report_customer_overdue_temp_extend">
+            <xpath expr="//div[@class='page']" position="replace">
+                <div class="page">
+                            <p>
+                                Document: Customer Overdue statement
+                                <br/>
+                                Print Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                                <br/>
+                                Customer Name: <b><span t-field="o.name"/></b>
+                                <br/>
+                                Customer ref:
+                                <span t-field="o.ref"/>
+                                <t t-if="o.vat">
+                                    <span t-field="o.vat"/>
+                                    <br/>
+                                </t>
+                                <t t-if="o.filter_project">
+                                    Project#: <b><span t-field="o.filter_project.name"/></b><br/>
+                                    Client LPO#. <b><span t-field="o.filter_project.client_lpo_no"/></b><br/>
+                                    Project Location: <b><span t-field="o.filter_project.project_location"/></b><br/>
+                                </t>
+                                <t t-if="o.filter_date and o.filter_date_to">
+                                    Date From: <b><span t-field="o.filter_date"/></b><br/>
+                                    Date To: <b><span t-field="o.filter_date_to"/></b>
+                                </t>
+
+                            </p>
+                            <t t-set="sum_total_overdue" t-value="0"/>
+                            <t t-set="sum_amount" t-value="0"/>
+                            <t t-set="sum_paid" t-value="0"/>
+                            <t t-set="sum_due" t-value="0"/>
+                            <table class="table table-condensed"
+                                   style="margin-top: 50px;">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice Date</th>
+                                        <th class="text-center">Reference</th>
+                                        <th class="text-center">Project No.</th>
+                                        <th class="text-center">Client LPO#.</th>
+                                        <th class="text-center">Project Location</th>
+                                        <th class="text-center">Due Date</th>
+                                        <th class="text-center">Invoice Amount</th>
+                                        <th class="text-center">Amount Paid</th>
+                                        <th class="text-center">Amount Due</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.cust_acc_stat_line_ids" t-as="line">
+                                        <t t-if="line.amount_residual > 0.00 and line.invoice_date_due &lt;= datetime.datetime.now().date()">
+                                            <td>
+                                                <span t-field="line.invoice_date"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.project_name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.client_lpo_no"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.project_location"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.invoice_date_due"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.amount_total_signed"/>
+                                                <t t-set="sum_amount" t-value="sum_amount+line.amount_total_signed"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.paid_amount"/>
+                                                <t t-set="sum_paid" t-value="sum_paid+line.paid_amount"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.amount_residual"/>
+                                                <t t-set="sum_total_overdue" t-value="sum_total_overdue+line.amount_residual"/>
+                                                <t t-set="sum_due" t-value="sum_due+line.amount_residual"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td class="text-center">
+                                            
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">
+                                            <span style="font-weight: bold;">Sub-Total :</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="float(sum_amount)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="float(sum_paid)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="float(sum_due)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p><h4>
+                                Total Overdue Amount :<t t-esc="float(sum_total_overdue)"/>
+                                </h4>
+                            </p>
+                </div>
+            </xpath>              
+        </template>
+        
+        <template inherit_id="of_account_statement.report_customer_statement_temp" id="report_customer_statement_temp">
+            <xpath expr="//div[@class='page']" position="replace">
+                <div class="page">
+                            <p>
+                                Document: Customer statement
+                                <br/>
+                                Print Date: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                                <br/>
+                                Customer Name: <b><span t-field="o.name"/></b>
+                                <br/>
+                                Customer ref:
+                                <span t-field="o.ref"/>
+                                <t t-if="o.vat">
+                                    <span t-field="o.vat"/>
+                                    <br/>
+                                </t>
+                                <t t-if="o.filter_project">
+                                    Project#: <b><span t-field="o.filter_project.name"/></b><br/>
+                                    Client LPO#. <b><span t-field="o.filter_project.client_lpo_no"/></b><br/>
+                                    Project Location: <b><span t-field="o.filter_project.project_location"/></b><br/>
+                                </t>
+                                <t t-if="o.filter_date and o.filter_date_to">
+                                    Date To: <b><span t-field="o.filter_date"/></b><br/>
+                                    Date From: <b><span t-field="o.filter_date_to"/></b>
+                                </t>
+                            </p>
+                            <t t-set="sum_amount" t-value="0"/>
+                            <t t-set="sum_paid" t-value="0"/>
+                            <t t-set="sum_due" t-value="0"/>
+                            <table class="table table-condensed"
+                                   style="margin-top: 50px;">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice Date</th>
+                                        <th class="text-center">Reference</th>
+                                        <th class="text-center">Project No.</th>
+                                        <th class="text-center">Client LPO#.</th>
+                                        <th class="text-center">Project Location</th>
+                                        <th class="text-center">Due Date</th>
+                                        <th class="text-center">Invoice Amount</th>
+                                        <th class="text-center">Amount Paid</th>
+                                        <th class="text-center">Amount Due</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.cust_acc_stat_line_ids" t-as="line">
+                                            <td>
+                                                <span t-field="line.invoice_date"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.project_name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.client_lpo_no"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.project_location"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.invoice_date_due"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.amount_total_signed"/>
+                                                <t t-set="sum_amount" t-value="sum_amount+line.amount_total_signed"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.paid_amount"/>
+                                                <t t-set="sum_paid" t-value="sum_paid+line.paid_amount"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="line.amount_residual"/>
+                                                <t t-set="sum_due" t-value="sum_due+line.amount_residual"/>
+                                            </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                        <td class="text-center">
+                                            
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">
+                                            <span style="font-weight: bold;">Sub-Total :</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="float(sum_amount)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="float(sum_paid)"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-esc="float(sum_due)"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <p><h4>
+                                Amount Due :<span t-field="o.cust_overall_balance_due"/>
+                                <br/>
+                                Overdue Amount :<span t-field="o.cust_total_overdue_amount"/>
+                                </h4>
+                            </p>
+                        </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

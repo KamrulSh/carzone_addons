@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='purchase_delivery_invoice']//group[@name='invoice_info']" position="inside">
+                    <field name="client_lpo_no"/>
+                <field name="project_id"/>
+                <field name="project_ref"/>
+            </xpath>
+            <field name="currency_id" position="after">
+                <field name="items"/>
+            </field>
+            <field name="picking_type_id" position="after">
+                <field name="delivery_terms"/>
+            </field>
+        </field>
+    </record>
+</odoo>

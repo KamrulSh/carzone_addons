@@ -1,0 +1,8 @@
+<odoo>
+    <menuitem id="menu_add_project_new"
+         name="Projects"
+         parent="project.menu_main_pm"
+         action="odoo_job_costing_management.open_view_project_job_all_config"
+         sequence="0"/>
+
+</odoo>

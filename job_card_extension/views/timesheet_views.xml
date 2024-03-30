@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="timesheet_line_tree_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree.inherit</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='task_id']" position="after">
+                <field name="instruction_job_id" optional="show"/>
+            </xpath>
+            <xpath expr="//tree/field[@name='name']" position="after">
+                <field name="user_id" optional="hide"/>
+                <field name="job_card_payment_id" optional="show"/>
+                <field name="departments_id" optional="show"/>
+                <field name="employees_id" optional="show"/>
+                <field name="employee_user_id" optional="hide"/>
+                <field name="vehicle_id" optional="show"/>
+                <field name="vehicle_model_id" optional="show"/>
+                <field name="assign_hours" optional="show"/>
+                <field name="start_time" optional="show"/>
+                <field name="end_time" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_timesheet_line_search_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.search.inherit</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="after">
+                <searchpanel>
+                    <field name="job_card_payment_id" icon="fa-user"/>
+                    <field name="departments_id" icon="fa-users" enable_counters="1"/>
+                </searchpanel>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Categories" name="groupby_categories" domain="[]" context="{'group_by': 'job_card_payment_id'}"/>
+                <filter string="Employee" name="groupby_employee" domain="[]" context="{'group_by': 'employees_id'}"/>
+                <filter string="Vehicle" name="groupby_vehicle" domain="[]" context="{'group_by': 'vehicle_id'}"/>
+                <filter string="Vehicle Model" name="groupby_vehicle_model" domain="[]" context="{'group_by': 'vehicle_model_id'}"/>
+            </xpath>
+            <field name="project_id" positiom="after">
+                <field name="vehicle_id"/>
+                <field name="vehicle_model_id"/>
+<!--                <field name="employees_id" string="Technician" filter_domain="[('employees_id.name', 'like', self)]"/>-->
+            </field>
+        </field>
+    </record>
+
+</odoo>

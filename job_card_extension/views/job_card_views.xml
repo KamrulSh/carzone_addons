@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form2_inherit_job" model="ir.ui.view">
+        <field name="name">Project Task From Inherit Job Card Extension</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="job_card.view_task_form2_inherit_job"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='daily_report']" position="after">                
+                 <page name="conditions" string="Terms &amp; Conditions" attrs="{'invisible': [('is_jobcard', '=', False)]}">
+                     <field name="condition" nolabel="1"/>
+                 </page>
+            </xpath>
+            <xpath expr="//field[@name='material_requisition_line_ids']//tree//field[@name='partner_id']" position="after">
+                <field name="added_in_cost_sheet" invisible="1"/>
+                <field name="is_approved" invisible="1"/>
+                <button string="Add In Cost Sheet" name="action_add_line_in_cost_sheet" type="object"
+                        class="oe_highlight" attrs="{'invisible':[('is_approved', '=', True),('added_in_cost_sheet', '=', True)]}"/>
+            </xpath>
+            <field name="tag_ids" position="after">
+                <field name="warranty" attrs="{'invisible': [('is_jobcard', '=', False)]}"/>
+            </field>
+            <xpath expr="//page[@name='instruction_job_order']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='daily_report']" position="before">
+                <page name="instruction_job_order" string="Instructions" attrs="{'invisible': [('is_jobcard', '=', False)]}"> <!-- 14/03/2022 -->
+                    <field name="instruction_job_order_ids" mode="tree" attrs="{'readonly': [('is_close', '=', True)]}">
+                        <form string="Instruction / Job Order">
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="pick_date"/>
+                                    <field name="start_date"/>
+                                    <field name="description"/>
+                                    <field name="note"/>
+                                    <field name="assign_hours" widget="float_time"/>
+                                </group>
+                                <group>
+                                    <field name="user_id"/>
+                                    <field name="task_id"/>
+                                    <field name="end_date"/>
+                                    <field name="status"/>
+                                    <field name="job_card_payment_id"/>
+                                    <field name="total_hours" widget="float_time"/>
+                                </group>
+                            </group>
+                        </form>
+                        <tree string="Instruction / Job Order" editable="bottom">
+                            <field name="name"/>
+                            <field name="pick_date"/>
+                            <field name="user_id"/>
+                            <field name="job_card_payment_id"/>
+                            <field name="description"/>
+                            <field name="note"/>
+                            <field name="assign_hours" widget="float_time"/>
+                            <field name="total_hours" widget="float_time" readonly="1"/>
+                            <field name="status"/>
+<!--                            <field name="start_date"/>-->
+<!--                            <field name="end_date"/>-->
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='daily_report']//tree//field[@name='name']" position="after">
+                <field name="user_id"/>
+                <field name="job_card_payment_id"/>
+                <field name="assign_hours"/>
+                <field name="departments_id" readonly="0"/>
+                <field name="employees_id"/>
+            </xpath>
+            <xpath expr="//page[@name='daily_report']//tree//field[@name='unit_amount']" position="before">
+                <field name="is_start_time" invisible="1"/>
+                <field name="start_time" widget="float_time" attrs="{'invisible': [('is_start_time', '=', False)]}"/>
+                <button name="action_start_time" class="oe_highlight"
+                        attrs="{'invisible': [('is_start_time', '!=', False)]}"
+                        string="Start" type="object"/>
+                <field name="is_end_time" invisible="1"/>
+                <field name="end_time" widget="float_time" attrs="{'invisible': [('is_end_time', '=', False)]}"/>
+                <button name="action_end_time" class="oe_highlight"
+                        attrs="{'invisible': [('is_end_time', '!=', False)]}"
+                        string="End" type="object"/>
+            </xpath>
+            <xpath expr="//page[@name='daily_report']//tree//field[@name='leader_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='daily_report']//tree//field[@name='note']" position="attributes">
+                 <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='daily_report']//tree//field[@name='workers_ids']" position="attributes">
+                 <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='job_cost_sheet']//tree//field[@name='price_unit']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//page[@name='job_cost_sheet']" position="before">
+                <page name="quality_checklist" string="Quality Checklist" attrs="{'invisible': [('is_jobcard', '=', False)]}">
+                     <field name="quality_checklist_ids" nolabel="1"/>
+                 </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">Project Task form Inherit Job Card Extension</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title pr-0']" position="replace">
+                 <div class="pr-0">
+                    <h1 class="d-flex flex-row justify-content-between">
+                        <field name="name" class="o_task_name text-truncate" placeholder="Task Title..." default_focus="1"/>
+                        <field name="kanban_state" widget="state_selection" class="ml-auto"/>
+                        <field name="priority" widget="priority" class="mr-3"/>
+                    </h1>
+                </div>
+            </xpath>
+             <field name="partner_id" position="before">
+                <field name="title" attrs="{'invisible': [('is_jobcard', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_task_tree2_inherit" model="ir.ui.view">
+        <field name="name">Project Task tree Inherit Job Card Extension</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="user_ids" position="after">
+                <field name="create_date"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- quality check form inherit -->
+    <record id="quality_checklist_form_view_inherit1" model="ir.ui.view">
+        <field name="name">quality checklist form view inherit1</field>
+        <field name="model">quality.checklist</field>
+        <field name="inherit_id" ref="job_card.quality_checklist_form_view"/>
+        <field name="arch" type="xml">
+            <field name="checklist_name_ids" position="after">
+                <field name="qc_image"/>
+            </field>
+        </field>
+    </record>
+</odoo>

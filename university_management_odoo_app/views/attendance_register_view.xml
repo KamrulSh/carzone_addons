@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="attendance_register_view_tree" model="ir.ui.view">
+        <field name="name">attendance.register.tree</field>
+        <field name="model">attendance.register</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="course_id"/>
+                <field name="batch_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="attendance_register_view_form" model="ir.ui.view">
+        <field name="name">attendance.register.view.form</field>
+        <field name="model">attendance.register</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>                   
+                    <group>
+                        <group>
+                            <field name="name" required="True"/>
+                            <field name="course_id" required="True" options="{'no_create': True, 'no_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="code" required="True"/>
+                            <field name="batch_id" required="True" domain="[('course_id', '=', course_id)]" options="{'no_create': True, 'no_edit': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="attendance_register_view_search" model="ir.ui.view">
+        <field name="name">attendance.register.search</field>
+        <field name="model">attendance.register</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="course_id"/>
+                <field name="batch_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_course_id" string="Cource" context="{'group_by':'course_id'}"/>
+                    <separator/>
+                    <filter name="group_by_course_id" string="Batch" context="{'group_by':'course_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_attendance_register" model="ir.actions.act_window">
+            <field name="name">Attendance Register</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">attendance.register</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create batch!
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="menu_attendance" name="Attendance" parent="main_menu_university_student" sequence="2"/>
+		<menuitem id="menu_attendance_register" name="Attendance Register" parent="menu_attendance" sequence="1" action= "action_attendance_register"/>
+</odoo>

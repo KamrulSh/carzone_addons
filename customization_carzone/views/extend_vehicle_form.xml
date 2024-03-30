@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cc_extend_vehicle_form" model="ir.ui.view">
+        <field name="name">Vehicle Form Extend</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_jobs_list" type="object" class="oe_stat_button" icon="fa-history">
+                    <field name="count_job_ids" widget="statinfo" string="Job Orders"/>
+                </button>
+                <button name="action_invoices_list" type="object" class="oe_stat_button" icon="fa-history">
+                    <field name="count_account_move_ids" widget="statinfo" string="Invoices"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <group string="Vehicle Details">
+                    <group>
+<!--                        <field name="cc_registration_no"/>-->
+                        <field name="license_plate"/>
+<!--                        <field name="cc_vin"/>-->
+                        <field name="vin_sn"/>
+                        <field name="cc_engin_no"/>
+                        <field name="cc_vehicle_make"/>
+                        <field name="model_id" string="Vehicle Model"/>
+                        <field name="cc_vehicle_type"/>
+                        <field name="cc_vehicle_color"/>
+                        <field name="cc_gears"/>
+                        <field name="cc_year"/>
+                        <field name="cc_fuel_type"/>
+                    </group>
+                    <group>
+                        <field name="cc_partner"/>
+                        <field name="cc_partner_phone"/>
+                        <field name="cc_partner_email"/>
+                        <field name="job_ids" invisible="1"/>
+                        <field name="cc_account_move_ids" invisible="1"/>
+
+                    </group>
+
+                </group>
+            </xpath>
+        </field>
+    </record>
+<!--    List view extend and add fields-->
+    <record id="cc_extend_vehicle_tree" model="ir.ui.view">
+        <field name="name">Vehicle Tree Extend</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='model_id']" position="after">
+<!--                <field name="cc_vin"/>-->
+                <field name="vin_sn"/>
+                <field name="cc_partner"/>
+                <field name="cc_partner_phone"/>
+                <field name="cc_partner_email"/>
+            </xpath>
+        </field>
+    </record>
+<!--    Search View Extend-->
+    <record id="cc_extend_vehicle_search" model="ir.ui.view">
+        <field name="name">Vehicle Search Extend</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field string="Customer Name" name="cc_partner" filter_domain="[('cc_partner.name', 'ilike', self)]"/>
+                <field string="Chassis Number" name="vin_sn" filter_domain="[('vin_sn', 'ilike', self)]"/>
+                <field string="Contact Number" name="cc_partner" filter_domain="['|', ('cc_partner.phone', 'ilike', self),('cc_partner.mobile', 'ilike', self)]"/>
+            </xpath>
+        </field>
+    </record>
+
+<!--    Override fleet vehicle action-->
+    <record id='fleet.fleet_vehicle_action' model='ir.actions.act_window'>
+        <field name="name">Vehicles</field>
+        <field name="res_model">fleet.vehicle</field>
+        <field name="view_mode">tree,kanban,form,pivot,activity</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Ready to manage your fleet more efficiently ?
+          </p><p>
+            Let's create your first vehicle.
+          </p>
+        </field>
+    </record>
+</odoo>

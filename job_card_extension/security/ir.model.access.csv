@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_customer_declaration,customer.declaration.user,model_customer_declaration,project.group_project_manager,1,1,1,1
+access_job_card_stage,job.card.stage.user,model_job_card_stage,project.group_project_manager,1,1,1,1
+access_job_card_warranty,job.card.warranty.user,model_job_card_warranty,project.group_project_manager,1,1,1,1
+access_job_card_payment,job.card.payment.user,model_job_card_payment,project.group_project_manager,1,1,1,1

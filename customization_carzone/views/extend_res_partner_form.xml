@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cc_extend_res_partner_form" model="ir.ui.view">
+        <field name="name">cc.extend.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='contact_addresses']" position="before">
+                <page name="vehicles" string="Vehicles">
+                    <field name="vehicle_ids">
+                        <tree>
+                            <field name="model_id"/>
+                            <field name="license_plate"/>
+                            <field name="vin_sn"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

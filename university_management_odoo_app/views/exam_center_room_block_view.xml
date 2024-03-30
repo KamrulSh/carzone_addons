@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+     <!-- Exam Center -->
+    <record id="exam_center_view_tree" model="ir.ui.view">
+        <field name="name">exam.center.tree</field>
+        <field name="model">exam.center</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="exam_center_view_form" model="ir.ui.view">
+        <field name="name">exam.center.view.form</field>
+        <field name="model">exam.center</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Center's Name" required="True"/>
+                        </h1>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="exam_center_view_search" model="ir.ui.view">
+        <field name="name">exam.center.search</field>
+        <field name="model">exam.center</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_exam_center" model="ir.actions.act_window">
+            <field name="name">Exam Center</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">exam.center</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create course!
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="sub_menu_exam_center" name="Exam Center" parent="exam_configure" sequence="2" action="action_exam_center"/>
+    <!-- Exam Block -->
+    <record id="exam_block_view_tree" model="ir.ui.view">
+        <field name="name">exam.block.tree</field>
+        <field name="model">exam.block</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="exam_block_view_form" model="ir.ui.view">
+        <field name="name">exam.block.view.form</field>
+        <field name="model">exam.block</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Block's Number" required="True"/>
+                        </h1>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="exam_block_view_search" model="ir.ui.view">
+        <field name="name">exam.block.search</field>
+        <field name="model">exam.block</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_exam_block" model="ir.actions.act_window">
+            <field name="name">Exam Block</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">exam.block</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create course!
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="sub_menu_exam_block" name="Exam Block" parent="exam_configure" sequence="2" action="action_exam_block"/>
+
+    <!-- Exam Room-->
+    <record id="exam_room_view_tree" model="ir.ui.view">
+        <field name="name">exam.room.tree</field>
+        <field name="model">exam.room</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="exam_room_view_form" model="ir.ui.view">
+        <field name="name">exam.room.view.form</field>
+        <field name="model">exam.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>                   
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Room's Number" required="True"/>
+                        </h1>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="exam_room_view_search" model="ir.ui.view">
+        <field name="name">exam.room.search</field>
+        <field name="model">exam.room</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_exam_room" model="ir.actions.act_window">
+            <field name="name">Exam Room</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">exam.room</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create course!
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="sub_menu_exam_room" name="Exam Room" parent="exam_configure" sequence="2" action="action_exam_room"/>
+</odoo>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_move_form_inherit" model="ir.ui.view">
+            <field name="name">account.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@id='other_tab']//group[@id='other_tab_group']" position="inside">
+                    <group name="reference">
+                        <field name="sale_id" attrs="{'invisible':[('move_type', 'in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="client_lpo_no" attrs="{'invisible':[('move_type', 'in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="items" attrs="{'invisible':[('move_type', 'in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="project_id" attrs="{'invisible':[('move_type', 'in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="project_ref" attrs="{'invisible':[('move_type', 'in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="purchase_id" attrs="{'invisible':[('move_type', 'not in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="bill_client_lpo_no" attrs="{'invisible':[('move_type', 'not in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="bill_items" attrs="{'invisible':[('move_type', 'not in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="bill_project_id" attrs="{'invisible':[('move_type', 'not in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                        <field name="bill_project_ref" attrs="{'invisible':[('move_type', 'not in', ('in_invoice', 'in_receipt', 'in_refund'))]}"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='sequence']" position="after">
+                    <field name="freeze" string="Freeze" force_save="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//form//field[@name='product_id']" position="before">
+                    <field name="freeze" string="Freeze"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='price_subtotal']" position="after">
+                    <field name="previous_subtotal" string="Previous Subtotal" force_save="1" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='l10n_ae_vat_amount']" position="after">
+                    <field name="previous_vat_amount" string=" Previous VAT Amount" force_save="1" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='price_unit']" position="after">
+                    <field name="previous_price_unit" string="Previous Price Unit" force_save="1" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='name']" position="after">
+                    <field name="freeze" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='credit']" position="after">
+                    <field name="previous_price_unit" invisible="1"/>
+                    <field name="previous_subtotal" invisible="1"/>
+                    <field name="previous_vat_amount" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='name']" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_out_invoice_tree_inherit2" model="ir.ui.view">
+            <field name="name">account.move.tree.inherit2</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_out_invoice_tree" />
+            <field name="arch" type="xml">
+                <field name="invoice_date" position="after">
+                    <field name="client_lpo_no" string="LPO No." optional="show"/>
+                    <field name="project_id" string="Project" optional="show"/>
+                    <field name="project_ref" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_in_invoice_bill_tree_inherit2" model="ir.ui.view">
+            <field name="name">account.move.tree.inherit2</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_in_invoice_bill_tree" />
+            <field name="arch" type="xml">
+                <field name="invoice_date" position="before">
+                    <field name="bill_client_lpo_no" string="LPO No." optional="show"/>
+                    <field name="bill_project_id" string="Project" optional="show"/>
+                    <field name="bill_project_ref" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_move_line_tree_grouped_partner_inherit" model="ir.ui.view">
+            <field name="name">account.move.line.tree.grouped.partner.inherit</field>
+            <field name="model">account.move.line</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="account.view_move_line_tree_grouped_partner"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="before">
+                    <field name="lpo_no" optional="show"/>
+                    <field name="project_ref" optional="show"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="account.action_account_moves_ledger_partner" model="ir.actions.act_window">
+            <field name="view_id" ref="formatted_reports.view_move_line_tree_grouped_partner_inherit"/>
+        </record>
+
+    </data>
+</odoo>

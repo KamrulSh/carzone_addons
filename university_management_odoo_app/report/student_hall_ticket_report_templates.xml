@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_student_hall_ticket_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <h4>
+                    <span><center>Hall Ticket</center> </span>
+                </h4>
+
+                <table width="100%">
+                    <tr>
+                        <th width="13">Course</th>
+                        <td width="87"><span t-field="doc.session_id.course_id.name"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="13">Student Name</th>
+                        <td width="87"><span t-field="doc.student_id.name"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="13">Parent Name</th>
+                        <td width="87"><span t-field="doc.student_id.parent_id.name"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="13">Seat No</th>
+                        <td width="87"><span t-field="doc.name"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="13">Room No</th>
+                        <td width="87"><span t-field="doc.room_id.name"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="13">Block No</th>
+                        <td width="87"><span t-field="doc.block_id.name"/> </td>
+                    </tr>
+                    <tr>
+                        <th width="13">Exam Center</th>
+                        <td width="87"><span t-field="doc.center_id.name"/> </td>
+                    </tr>
+                </table>
+
+                <table class="table table-sm o_main_table">
+                    <t t-set="sr" t-value="1"/>
+                    <thead>
+                        <tr>
+                            <th>sr</th>
+                            <th>Subject</th>
+                            <th>Subject Code</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Total Marks</th>
+                            <th>Passing Marks</th>
+                            <th>Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-foreach="doc.session_id.exam_ids" t-as="line">
+
+                            <tr>
+                                <td><span t-esc="sr"/></td>
+                                <td>
+                                    <span t-field="line.subject_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.subject_id.code"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.start_date"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.end_date"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.total_marks"/>
+                                </td>
+                                <td>
+                                    <span t-field="line.pass_marks"/>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <t t-set="sr" t-value="sr + 1"/>
+                        </t>
+                    </tbody>
+                </table>
+                <table style="margin-top:20px;" width="100%">
+                    <tr>
+                        <td width="60%"><b>Principal Sign</b></td>
+                    </tr>
+                    <tr height="45px;">
+                        <td width="60%">&amp;nbsp;&amp;nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="60%">__________________________</td>
+                    </tr>
+                    <tr>
+                        <td><b>Date</b></td>
+                    </tr>
+                </table>
+                <p><b>Important Instruction</b></p>
+                <table width="100%">
+                    <tr>
+                        <td width="2%" style="font-size:70%">1)</td>
+                        <td width="98%" style="font-size:70%">No candidate shall be permitted to leave the Examination Room/ Hall before the end of the examination</td>
+                    </tr>
+                    <tr>
+                        <td width="2%" style="font-size:70%">2)</td>
+                        <td width="98%" style="font-size:70%">The Admit Card is provisional, subject to satisfying the eligibility conditions as given in the Information Bulletin.</td>
+                    </tr>
+                    <tr>
+                        <td width="2%" style="font-size:70%">3)</td>
+                        <td width="98%" style="font-size:70%">No Candidate would be allowed to enter the Examination Centre, without Admit Card, Valid ID Proof and proper frisking.
+Frisking through Handheld Metal Detector (HHMD) will be carried out without touching body</td>
+                    </tr>
+                    <tr>
+                        <td width="2%" style="font-size:70%">4)</td>
+                        <td width="98%" style="font-size:70%">Candidate must carry “Any one of the original and valid Photo Identification Proof issued by the government” – PAN
+card/Driving License/Voter ID/12th Class Board Admit or Registration card/ Passport/ Aadhaar Card (With photograph)/ E-Aadhaar/
+Ration Card./ Aadhaar Enrolment No. with Photo. All other ID/Photocopies of IDs even if attested/scanned photo of IDs in mobile
+phone will NOT be considered as valid ID Proof.</td>
+                    </tr>
+                    <tr>
+                        <td width="2%" style="font-size:70%">5)</td>
+                        <td width="98%" style="font-size:70%">Candidates are NOT allowed to carry any personal belongings including electronic devices, mobile phone and other banned/
+prohibited items listed in the Information Bulletin to the Examination Centre. Examination Officials will not be responsible for safe
+keep of personal belongings and there will be no such facility.</td>
+                    </tr>
+                </table>
+
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+    <template id="report_student_hall_ticket">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="university_management_odoo_app.report_student_hall_ticket_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

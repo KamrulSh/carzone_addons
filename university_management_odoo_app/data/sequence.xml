@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for sale.order -->
+        <record id="seq_admission_registration" model="ir.sequence">
+            <field name="name">Admission Registration</field>
+            <field name="code">admission.registration</field>
+            <field name="prefix">SA-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_university_assignment" model="ir.sequence">
+            <field name="name">Admission Registration</field>
+            <field name="code">university.assignment</field>
+            <field name="prefix">ASS-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_library_card" model="ir.sequence">
+            <field name="name">Library Card</field>
+            <field name="code">library.card</field>
+            <field name="prefix">LIBC-</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+         <record id="seq_media_queue_request" model="ir.sequence">
+            <field name="name">Media Queue Request</field>
+            <field name="code">media.queue.request</field>
+            <field name="prefix">QR-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_student_hall_ticket" model="ir.sequence">
+            <field name="name">Student Hall Ticket</field>
+            <field name="code">student.hall.ticket</field>
+            <field name="prefix">C-</field>
+            <field name="padding">7</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_student_gr_no" model="ir.sequence">
+            <field name="name">Student GR No</field>
+            <field name="code">university.student</field>
+            <field name="prefix">GR-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

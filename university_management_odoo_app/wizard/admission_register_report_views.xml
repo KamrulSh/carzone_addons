@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="view_admission_registration_form" model="ir.ui.view">
+				<field name="name">admission.register.report.form</field>
+				<field name="model">admission.register.report</field>
+				<field name="arch" type="xml">
+				<form string="Payment Monthly Statement">
+				<sheet>
+					<group>
+						<group>
+							<field name="date_start" required="1"/>
+							<field name="course_id" required="1"/>
+						</group>
+						<group>
+
+							<field name="date_end" required="1"/>
+						</group>
+					</group>
+					<footer>
+						<group>
+							<button name="action_excel_report" string="Print Report" type="object" class="btn-primary"/>
+						</group>
+						<group>
+							<button string="Cancel" class="btn-default" special="cancel"/>
+						</group>
+					</footer> 		
+				</sheet>
+				</form>
+				</field>
+				</record>
+
+				<record id="view_admission_register_excel_report" model="ir.ui.view">
+	            <field name="name">hr.wala.report</field>
+	            <field name="model">admission.register.excel.report</field>
+	            <field name="arch" type="xml">
+	                <form string="Generated Excel File">
+	                    <group>
+	                        <field name="file_name" invisible="1"/>
+	                        <field name="excel_file" readonly="1" filename="file_name"/>
+	                    </group>
+	                    <footer>
+	                     <button string="Close" type="object" special="cancel" class="btn-primary"/>
+	                 </footer>
+	                </form>
+	            </field>
+	        	</record>
+
+			<record model="ir.actions.act_window" id="action_admission_register_report">
+				<field name="name">Admission Registration Report</field>
+				<field name="res_model">admission.register.report</field>
+				<field name="binding_view_types">form</field>
+				<field name="view_mode">form</field>
+				<field name="target">new</field>
+			</record>
+
+			<menuitem id="main_menu_admission_report"
+					  parent='main_menu_admission_register'
+					  name="Report"
+					  sequence="9"
+	        		/>
+
+			<menuitem id="menu_admission_registration_report"
+					  action="action_admission_register_report"
+					  parent='main_menu_admission_report'
+					  name="Admission Registration"
+					  sequence="1"
+	        		/>
+
+
+	</data>
+</odoo>

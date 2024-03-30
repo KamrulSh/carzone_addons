@@ -1,0 +1,324 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!--- Library Media View-->
+    <record id="library_media_view_tree" model="ir.ui.view">
+        <field name="name">library.media.tree</field>
+        <field name="model">library.media</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="edition"/>
+                <field name="author_ids" widget="many2many_tags"/>
+                <field name="publisher_ids" widget="many2many_tags"/>
+                <field name="isbn_code"/>
+                <field name="internal_code"/>
+            </tree>
+        </field>
+    </record>
+    <record id="library_media_view_form" model="ir.ui.view">
+        <field name="name">library.media.view.form</field>
+        <field name="model">library.media</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Media's Name" required="True"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="author_ids" widget="many2many_tags" required="1"/>
+                            <field name="edition"/>
+                            <field name="isbn_code"/>
+                        </group>
+                        <group>
+                            <field name="publisher_ids" widget="many2many_tags" required="1"/>
+                            <field name="internal_code"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Unit">
+                            <field name="unit_ids">
+                                <tree editable="bottom">
+                                    <field name="media_id" invisible="1"/>
+                                    <field name="name" required="True"/>
+                                    <field name="barcode"/>
+                                    <field name="state"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="media_id"/>
+                                            <field name="name"/>
+                                        </group>
+                                        <group>
+                                            <field name="barcode"/>
+                                            <field name="state"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Description">
+                            <field name="remarks" nolable="1"/>
+                        </page>
+                        <page string="Movements">
+                            <field name="movement_ids">
+                                <tree editable="bottom">
+                                    <field name="type" required="1"/>
+                                    <field name="student_id" attrs="{'invisible' : [('type', '=', 'faculty')], 'required' : [('type', '=', 'student')]}"/>
+                                    <field name="faculty_id" attrs="{'invisible' : [('type', '=', 'student')], 'required' : [('type', '=', 'faculty')]}"/>
+                                    <field name="media_id" invisible="True"/>
+                                    <field name="unit_id" required="1" domain="[('state','=','available')]" options="{'no_create': True, 'no_edit': True}"/>
+                                    <field name="issue_date" required="1"/>
+                                    <field name="due_date" required="1"/>
+                                    <field name="return_date"/>
+                                    <field name="penalty"/>
+                                    <field name="state" readonly="1" />
+                                    <button name="action_return"
+                                        string="Return"
+                                        type="object"
+                                        class="btn-primary"
+                                        states="issue"
+                                        />
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="media_id" required="True"/>
+                                        </group>
+                                        <group>
+                                            <field name="unit_id"/>
+                                        </group>
+                                    </group>
+                                    <group string="Issue Details">
+                                        <group>
+                                            <field name="type" required="1"/>
+                                            <field name="student_id" attrs="{'invisible' : [('type', '=', 'faculty')], 'required' : [('type', '=', 'student')]}"/>
+                                            <field name="faculty_id" attrs="{'invisible' : [('type', '=', 'student')], 'required' : [('type', '=', 'faculty')]}"/>
+                                            <field name="library_card_id" force_save="True"/>
+
+                                        </group>
+                                        <group>
+                                            <field name="issue_date" required="1"/>
+                                            <field name="due_date" required="1"/>
+                                            <field name="return_date"/>
+                                            <field name="penalty"/>
+                                        </group>
+
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Media Queue Request">
+                            <field name="queue_request_ids">
+                                <tree editable="bottom">
+                                    <field name="media_id" invisible="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="user_id"/>
+                                    <field name="from_date" required="1"/>
+                                    <field name="to_date"/>
+                                    <field name="state" readonly="1"/>
+                                    <button name="action_accept"
+                                        string="Accept"
+                                        type="object"
+                                        class="btn-primary"
+                                        states="request"
+                                        />
+                                        <button name="action_reject"
+                                            string="Reject"
+                                            type="object"
+                                            class="btn-primary"
+                                            states="request"
+                                            />
+                                </tree>
+                                <form>
+                                    <header>
+                                        <button name="action_accept"
+                                        string="Accept"
+                                        type="object"
+                                        class="btn-primary"
+                                        states="request"
+                                        />
+                                        <button name="action_reject"
+                                            string="Reject"
+                                            type="object"
+                                            class="btn-primary"
+                                            states="request"
+                                            />
+                                        <field name="state" widget="statusbar" readonly="1"/>
+                                    </header>
+                                    <sheet>
+                                        <div class="oe_title">
+                                        <h1 class="d-flex">
+                                            <field name="name" placeholder="Name" readonly="True"/>
+                                        </h1>
+                                    </div>
+                                    <group>
+                                        <group>
+                                            <field name="user_id"/>
+                                            <field name="from_date"/>
+
+                                        </group>
+                                        <group>
+                                            <field name="media_id"/>
+                                            <field name="to_date"/>
+                                        </group>
+
+                                    </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="library_media_view_search" model="ir.ui.view">
+        <field name="name">library.media.search</field>
+        <field name="model">library.media</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="edition"/>
+                <field name="author_ids" widget="many2many_tags"/>
+                <field name="publisher_ids" widget="many2many_tags"/>
+                <field name="isbn_code"/>
+                <field name="internal_code"/>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_library_media" model="ir.actions.act_window">
+            <field name="name">Media</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">library.media</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create faculty!
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="main_menu_library_media" name="Media" sequence="4" parent= "main_menu_library"/>
+
+		<menuitem id="sub_menu_library_media" name="Media" parent="main_menu_library_media" sequence="1" action="action_library_media"/>
+
+    <!-- Media Request View-->
+
+    <record id="media_purchase_request_view_tree" model="ir.ui.view">
+        <field name="name">media.purchase.request.tree</field>
+        <field name="model">media.purchase.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="author_id"/>
+                <field name="publisher_id"/>
+                <field name="edition"/>
+                <field name="subject_id"/>
+                <field name="course_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="media_purchase_request_view_form" model="ir.ui.view">
+        <field name="name">media.purchase.request.view.form</field>
+        <field name="model">media.purchase.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_request"
+                        string="Request"
+                        type="object"
+                        class="btn-primary"
+                        states="draft"
+                    />
+                    <button name="action_accept"
+                        string="Accept"
+                        type="object"
+                        class="btn-primary"
+                        states="request"
+                    />
+                    <button name="action_reject"
+                            string="Reject"
+                            type="object"
+                            class="btn-primary"
+                            states="request"
+                        />
+                    <field name="state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1" attrs="{'readonly':[('state','=','accept')]}"/>
+                            <field name="user_id" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','accept')]}"/>
+                            <field name="author_id" required="1" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','accept')]}"/>
+                            <field name="publisher_id" required="1" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','accept')]}"/>
+                        </group>
+                        <group>
+                            <field name="course_id" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','accept')]}"/>
+                            <field name="subject_id" options="{'no_create': True, 'no_edit': True}" attrs="{'readonly':[('state','=','accept')]}"/>
+                            <field name="edition" attrs="{'readonly':[('state','=','accept')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="media_purchase_request_view_search" model="ir.ui.view">
+        <field name="name">media.purchase.request.search</field>
+        <field name="model">media.purchase.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="author_id"/>
+                <field name="publisher_id"/>
+                <field name="edition"/>
+                <field name="subject_id"/>
+                <field name="course_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_user_id" string="Requested by" context="{'group_by':'user_id'}"/>
+                    <filter name="group_by_author_id" string="Author" context="{'group_by':'author_id'}"/>
+                    <filter name="group_by_publisher_id" string="Publisher" context="{'group_by':'publisher_id'}"/>
+                    <separator/>
+                    <filter name="group_by_state" string="State" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_media_purchase_request" model="ir.actions.act_window">
+            <field name="name">Media Purchase Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">media.purchase.request</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create faculty!
+                </p>
+            </field>
+		</record>
+
+
+		<menuitem id="menu_media_purchase_request" name="Media Purchase Request" parent="main_menu_library_media" sequence="5" action="action_media_purchase_request"/>
+
+
+</odoo>

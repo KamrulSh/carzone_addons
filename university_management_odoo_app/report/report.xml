@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_student_hall_ticket_report" model="ir.actions.report">
+            <field name="name">Hall Ticket</field>
+            <field name="model">student.hall.ticket</field>
+            <field name="binding_model_id" ref="model_student_hall_ticket"/>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">university_management_odoo_app.report_student_hall_ticket</field>
+            <field name="report_file">university_management_odoo_app.report_student_hall_ticket</field>
+            <field name="print_report_name">'Hall Ticket - %s' % (object.student_id.name)</field>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

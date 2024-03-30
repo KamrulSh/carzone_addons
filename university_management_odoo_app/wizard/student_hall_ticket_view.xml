@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="student_hall_ticket_view_form" model="ir.ui.view">
+        <field name="name">student.hall.ticket.view.form</field>
+        <field name="model">student.hall.ticket</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>                   
+                    <group>
+                        <group>
+                            <field name="session_id" required="1" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="course_id" invisible="1"/>
+                            <field name="batch_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="student_id" required="1" domain="[('course_id', '=', course_id),('active', '=', True)]" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="name" invisible="1"/>
+                            <field name="center_id" invisible="1"/>
+                            <field name="block_id" invisible="1"/>
+                            <field name="room_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                       <button name="action_download" string="Download" type="object" class="oe_highlight" />
+                       <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+		<record id="action_student_hall_ticket" model="ir.actions.act_window">
+            <field name="name">Student Hall Ticket</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.hall.ticket</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+		</record>
+
+		<menuitem id="sub_menu_student_hall_ticket" name="Student Hall Ticket" parent="exam_configure" sequence="10" action="action_student_hall_ticket"/>
+</odoo>

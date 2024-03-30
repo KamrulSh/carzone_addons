@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project -->
+    <record id="edit_project_inherit" model="ir.ui.view">
+        <field name="name">project.project.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <field name="project_location"/>
+                <field name="client_lpo_no"/>
+            </field>
+        </field>
+    </record>
+</odoo>

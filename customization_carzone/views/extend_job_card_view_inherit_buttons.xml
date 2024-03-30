@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cc_extend_view_task_form2_inherit_job" model="ir.ui.view">
+        <field name="name">cc_extend_view_task_form2_inherit_job</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="job_card.view_task_form2_inherit_job"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='show_invoice']" position="replace">
+            </xpath>
+            <xpath expr="//button[@name='action_mrak_done']" position="replace">
+            </xpath>
+            <xpath expr="//button[@name='action_re_open']" position="replace">
+            </xpath>
+            <xpath expr="//button[@name='show_requisition']" position="replace">
+                <button class="oe_stat_button" type="object" string="Invoice" name="show_invoice" style="min-width: 200px !important" icon="fa-pencil-square-o" attrs="{'invisible': [('is_jobcard', '=', False)]}"/>
+                <button class="oe_stat_button" type="object" string="Requisitions" name="show_requisition" icon="fa-shopping-cart" attrs="{'invisible': [('is_jobcard', '=', False)]}"/>
+                <button class="oe_stat_button" name="action_mrak_done" string="Mark Complete" type="object" icon="fa-pencil-square-o" attrs="{'invisible':['|',  ('is_close', '!=', False), ('is_jobcard', '=', False)]}"/>
+                <button class="oe_stat_button" name="action_re_open" string="Open" type="object" icon="fa-pencil-square-o" attrs="{'invisible':['|', ('is_close', '!=', True), ('is_jobcard', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

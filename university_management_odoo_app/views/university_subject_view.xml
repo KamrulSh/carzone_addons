@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="university_subject_view_tree" model="ir.ui.view">
+        <field name="name">university.subject.tree</field>
+        <field name="model">university.subject</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="type"/>
+                <field name="subject_type"/>
+                <field name="grade"/>
+                <field name="department_id"/>
+                <field name="course_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+    <record id="university_subject_view_form" model="ir.ui.view">
+        <field name="name">university.subject.view.form</field>
+        <field name="model">university.subject</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>                   
+                    <group>
+                        <group>
+                            <field name="name" required="True"/>
+                            <field name="type" required="True"/>
+                            <field name="grade"/>
+
+                        </group>
+                        <group>
+                            <field name="code" required="True"/>
+                            <field name="subject_type" required="True"/>
+                            <field name="department_id" options="{'no_create': True, 'no_edit': True}"/>
+                            <field name="course_ids" widget="many2many_tags" options="{'no_create': True, 'no_edit': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="university_subject_view_search" model="ir.ui.view">
+        <field name="name">university.subject.search</field>
+        <field name="model">university.subject</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="type"/>
+                <field name="subject_type"/>
+                <field name="grade"/>
+                <field name="department_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_type" string="Type" context="{'group_by':'type'}"/>
+                    <separator/>
+                    <filter name="group_by_subject_type" string="Subject" context="{'group_by':'subject_type'}"/>
+                    <filter name="group_by_department_id" string="Department" context="{'group_by':'department_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_university_subject" model="ir.actions.act_window">
+            <field name="name">Subject</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">university.subject</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create subject!
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="sub_menu_university_subject" name="Subject" parent="student_configure" sequence="7" action= "action_university_subject"/>
+</odoo>

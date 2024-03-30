@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="result_template_view_tree" model="ir.ui.view">
+        <field name="name">result.template.tree</field>
+        <field name="model">result.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="session_id"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+    <record id="result_template_view_form" model="ir.ui.view">
+        <field name="name">result.template.view.form</field>
+        <field name="model">result.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>                   
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="session_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="result_template_view_search" model="ir.ui.view">
+        <field name="name">result.template.search</field>
+        <field name="model">result.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="session_id"/>
+                <field name="date"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_session_id" string="Exam Session" context="{'group_by':'session_id'}"/>
+                    <separator/>
+                    <filter name="group_by_date" string="Date" context="{'group_by':'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+		<record id="action_result_template" model="ir.actions.act_window">
+            <field name="name">Result Template</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">result.template</field>
+            <field name="view_mode">tree,search,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Records not available. Let's create course!
+                </p>
+            </field>
+		</record>
+
+        <menuitem id="main_menu_result" sequence="3" parent="main_menu_exam" name="Result"/>
+		<menuitem id="menu_result_template" name="Result Template" parent="main_menu_result" sequence="1" action="action_result_template"/>
+</odoo>

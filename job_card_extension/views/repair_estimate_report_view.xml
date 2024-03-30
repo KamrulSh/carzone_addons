@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Repair Estimate -->
+    <record id="action_repair_estimate_report" model="ir.actions.report">
+        <field name="name">Repair Estimate</field>
+        <field name="model">project.task</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">job_card_extension.repair_estimate_report</field>
+        <field name="report_file">job_card_extension.repair_estimate_report</field>
+        <field name="binding_model_id" ref="project.model_project_task"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Proforma Invoice -->
+    <record id="action_proforma_invoice_report" model="ir.actions.report">
+        <field name="name">Proforma Invoice</field>
+        <field name="model">project.task</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">job_card_extension.proforma_Invoice_report</field>
+        <field name="report_file">job_card_extension.proforma_Invoice_report</field>
+        <field name="binding_model_id" ref="project.model_project_task"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="repair_estimate_report">
+       <t t-foreach="docs" t-as="o">
+         <t t-call="job_card_extension.external_layout">
+             <t t-call="web.html_container">
+               <div class="page">
+                   <style>
+                       .borderless td, .borderless th {
+                            border: none;
+                        }
+                       .title {
+                            border-top: 2px solid black;
+                            border-bottom: 2px solid black;
+                       }
+
+                   </style>
+                   <div>
+                       <table class="title" cellpadding="2">
+                           <tr>
+                               <td width="15%" class="text-left">
+                                   Job no.: <span t-field="o.job_no"/>
+                               </td>
+                               <td class="text-center" width="50%" style="font-size: 20px;">
+                                   <b>Repair Estimate</b>
+                               </td>
+                               <td width="18%" class="text-right">
+                                  Date: <span t-field="o.date_assign" t-options='{"format": "dd/MM/yyyy hh:mm:ss"}'/>
+                               </td>
+                           </tr>
+                       </table>
+                   </div>
+                   <div class="row" style="margin-top: 1rem;">
+                       <div class="col-6" style="margin-left: 1rem;">
+                           <table style="width: 100%;color: #212529; margin-top: 1rem;">
+                                <tr>
+                                    <td style="width: 25px;"><b>Name</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 160px;" class="text-left"><span t-field="o.partner_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>Address</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;">
+                                        <t t-if="o.partner_id.street"><span t-field="o.partner_id.street"/>,</t>
+                                        <t t-if="o.partner_id.street2"><span t-field="o.partner_id.street2"/>,</t>
+                                        <t t-if="o.partner_id.city"><span t-field="o.partner_id.city"/>,</t>
+                                        <t t-if="o.partner_id.state_id"><span t-field="o.partner_id.state_id.name"/>,</t>
+                                        <t t-if="o.partner_id.zip"><span t-field="o.partner_id.zip"/></t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>Mobile no</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;">
+                                        <span t-field="o.cc_partner_mobile"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>Email</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;"><span t-field="o.cc_partner_email"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>TRN No.</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;"><span t-field="o.partner_id.trn_no"/></td>
+                                </tr>
+                            </table>
+                       </div>
+                       <div class="col-6" style="margin-left: 3rem;">
+                           <table style="width: 100%;color: #212529; margin-top: 1rem;">
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Reg. No.</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 220px;" class="text-left"><span t-field="o.register_no"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Chassis No.</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.cc_vehicle.vin_sn"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Make/Model</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.cc_vehicle_model"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Kms</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.odometer"/></td>
+                                </tr>
+                               <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Year</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.year"/></td>
+                                </tr>
+                            </table>
+                       </div>
+                   </div>
+
+                   <!-- Customer Complaints -->
+                   <div t-if="o.description" style="border-top: 2px solid black;">
+                       <br/><b>Concerns &amp; Job Description:</b><br/>
+                       <span t-field="o.description"/>
+                   </div>
+
+                   <!-- Is there a discount on at least one line? -->
+                   <t t-set="total_discount" t-value="0"/>
+                   <t t-set="display_discount" t-value="any(l.discount for l in o.job_cost_sheet_ids)"/>
+
+                   <!-- Cost Sheet Lines -->
+                   <div style="height: 100%;">
+                       <t t-foreach="o.separate_cost_sheet_lines()" t-as="job_cost_sheet_lines">
+                       <t t-set="line_total_amount" t-value="0"/>
+                        <t t-foreach="job_cost_sheet_lines" t-as="job_cost_sheet_line">
+                            <div>
+                                <t t-if="len(job_cost_sheet_line) > 1">
+                                    <t t-if="job_cost_sheet_line[0].cost_type == 'material'">
+                                        <b>Parts</b><br/>
+                                    </t>
+                                    <t t-else="">
+                                        <b><t t-esc="job_cost_sheet_line[0].cost_type.title()"/></b><br/>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="job_cost_sheet_line.cost_type == 'material'">
+                                        <b>Parts</b><br/>
+                                    </t>
+                                    <t t-else="">
+                                        <b><t t-esc="job_cost_sheet_line.cost_type.title()"/></b><br/>
+                                    </t>
+                                </t>
+                               <table style="width: 100%;">
+                                    <tr style="border-bottom: 1px solid black;">
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>S.No.</strong>
+                                        </td>
+                                        <td class="text-center">
+                                             <t t-if="len(job_cost_sheet_line) > 1">
+                                                 <t t-if="job_cost_sheet_line[0].cost_type == 'material'">
+                                                     <strong>Parts Description</strong>
+                                                 </t>
+                                                 <t t-else="">
+                                                    <strong><t t-esc="job_cost_sheet_line[0].cost_type"/> Description</strong>
+                                                 </t>
+                                             </t>
+                                             <t t-else="">
+                                                 <t t-if="job_cost_sheet_line[0].cost_type == 'material'">
+                                                    <strong>Parts Description</strong>
+                                                 </t>
+                                                  <t t-else="">
+                                                    <strong><t t-esc="job_cost_sheet_line.cost_type"/> Description</strong>
+                                                 </t>
+
+                                             </t>
+
+                                        </td>
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>QTY</strong>
+                                        </td>
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>VAT</strong>
+                                        </td>
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>Rate</strong>
+                                        </td>
+                                        <td t-if="display_discount" style="width: 8%" class="text-center">
+                                            <strong>Discount</strong>
+                                        </td>
+                                        <td style="width: 18%" class="text-right">
+                                            <strong>Tax Amount</strong>
+                                        </td>
+                                        <td style="width: 18%" class="text-right">
+                                            <strong>Value AED</strong>
+                                        </td>
+                                    </tr>
+                                    <t t-set="count" t-value="0"/>
+                                   <t t-foreach="job_cost_sheet_line" t-as="cost_sheet_line">
+                                       <t t-if="cost_sheet_line.cc_check_box">
+                                        <t t-set="total_discount" t-value="cost_sheet_line.discount + total_discount"/>
+                                        <t t-set="line_total_amount" t-value="cost_sheet_line.price_subtotal + line_total_amount"/>
+                                        <tr>
+                                            <t t-set="count" t-value="count + 1"/>
+                                            <td style="width: 8%;" class="text-center">
+                                                <span t-esc="count"/>
+                                            </td>
+                                            <td class="text-left">
+                                                <span t-field="cost_sheet_line.name"/>
+                                            </td>
+                                            <td style="width: 8%" class="text-center">
+                                                <span t-field="cost_sheet_line.quantity"/>
+                                            </td>
+                                            <td style="width: 8%" class="text-center">
+                                                <span t-esc="', '.join(map(lambda x: (x.description or x.name), cost_sheet_line.invoice_line_tax_ids))"/>
+                                            </td>
+                                            <td style="width: 8%" class="text-center">
+                                                <span t-field="cost_sheet_line.price_unit"/>
+                                            </td>
+                                            <td t-if="display_discount" style="width: 8%" class="text-center">
+                                                <span t-field="cost_sheet_line.discount"/>
+                                            </td>
+                                            <td style="width: 18%" class="text-right">
+                                                <span t-esc="cost_sheet_line.tax_amount" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/>
+                                            </td>
+                                            <td style="width: 18%;" class="text-right">
+                                                <span t-field="cost_sheet_line.price_subtotal"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                   </t>
+                                </table>
+                           </div>
+                        </t>
+                       <table style="width: 20%" class="text-right" align="right">
+                            <tr style="border-top: 1px solid black;">
+                                <td><b>Total:</b></td>
+                                <td><t t-esc="line_total_amount"/> <t t-esc="o.custom_currency_id.name"/> </td>
+                            </tr>
+                        </table>
+                       <br/>
+                   </t>
+                   </div>
+
+                   <!-- Total Amounts -->
+                   <t t-set="untaxed_amount" t-value="o.cost_sheet_amount_untaxed"/>
+                   <t t-set="amount_tax" t-value="o.cost_sheet_amount_tax"/>
+                   <t t-set="amount_total" t-value="o.cost_sheet_amount_total"/>
+                    <div style="height: 230px;">
+                        <p></p>
+                    </div>
+                   <div class="row" style="margin-top: 5%;">
+                       <div class="col-7 text-left">
+                           <p style="margin-bottom: 0px;">
+                               <b>Total Amount In Words:</b> <span t-field="o.num_word"/>
+                           </p>
+                       </div>
+                       <div class="col-5 text-right">
+                           <table style="border: 2px solid black; width:80%;" align="right">
+                               <tr style="border-bottom: 2px solid black;">
+                                   <td style="width: 18%"><b>Amount AED</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(untaxed_amount)" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                                <tr t-if="display_discount" style="border-bottom: 2px solid black;">
+                                    <td style="width: 18%"><b>Discount AED</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(total_discount)" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                                <tr style="border-bottom: 2px solid black;">
+                                    <td style="width: 18%"><b>5% VAT</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(amount_tax)" t-options="{'widget': 'float', 'precision': 2}"/> </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 18%"><b>Net Total AED</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(amount_total)" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                           </table>
+                       </div>
+                   </div>
+                   <div class="row" style="margin-left: 2px;">
+                       <t t-if="o.condition">
+                           <span t-field="o.condition"/>
+                       </t>
+                   </div>
+                   <div class="row" style="margin-top: 2%;">
+                       <div class="col-6">
+                           <table style="width:40%" align="left">
+                                <tr>
+                                    <td><b>Name:</b></td>
+                                    <td>............................................................</td>
+                                </tr>
+                           </table>
+                       </div>
+                       <div class="col-6">
+                          <table style="width:40%"  align="center">
+                            <tr>
+                                <td><b>Signature:</b></td>
+                                <td>............................................................</td>
+                            </tr>
+                          </table>
+                       </div>
+                   </div>
+               </div>
+           </t>
+         </t>
+       </t>
+    </template>
+
+    <template id="proforma_Invoice_report">
+       <t t-foreach="docs" t-as="o">
+         <t t-call="job_card_extension.external_layout">
+             <t t-call="web.html_container">
+               <div class="page">
+                   <style>
+                       .borderless td, .borderless th {
+                            border: none;
+                        }
+                       .title {
+                            border-top: 2px solid black;
+                            border-bottom: 2px solid black;
+                       }
+
+                   </style>
+                   <div>
+                       <table class="title" cellpadding="2">
+                           <tr>
+                               <td width="15%" class="text-left">
+                                   Job no.: <span t-field="o.job_no"/>
+                               </td>
+                               <td class="text-center" width="50%" style="font-size: 20px;">
+                                   <b>Proforma Invoice</b>
+                               </td>
+                               <td width="18%" class="text-right">
+                                  Date: <span t-field="o.date_assign" t-options='{"format": "dd/MM/yyyy hh:mm:ss"}'/>
+                               </td>
+                           </tr>
+                       </table>
+                   </div>
+                   <div class="row" style="margin-top: 1rem;">
+                       <div class="col-6" style="margin-left: 1rem;">
+                           <table style="width: 100%;color: #212529; margin-top: 1rem;">
+                                <tr>
+                                    <td style="width: 25px;"><b>Name</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 160px;" class="text-left"><span t-field="o.partner_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>Address</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;">
+                                        <t t-if="o.partner_id.street"><span t-field="o.partner_id.street"/>,</t>
+                                        <t t-if="o.partner_id.street2"><span t-field="o.partner_id.street2"/>,</t>
+                                        <t t-if="o.partner_id.city"><span t-field="o.partner_id.city"/>,</t>
+                                        <t t-if="o.partner_id.state_id"><span t-field="o.partner_id.state_id.name"/>,</t>
+                                        <t t-if="o.partner_id.zip"><span t-field="o.partner_id.zip"/></t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>Mobile no</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;">
+                                        <span t-field="o.cc_partner_mobile"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>Email</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;"><span t-field="o.cc_partner_email"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 25px;"><b>TRN No.</b></td>
+                                    <td style="width: 5px;" class="text-left"><b>:</b></td>
+                                    <td style="width: 150px;"><span t-field="o.partner_id.trn_no"/></td>
+                                </tr>
+                            </table>
+                       </div>
+                       <div class="col-6" style="margin-left: 3rem;">
+                           <table style="width: 100%;color: #212529; margin-top: 1rem;">
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Reg. No.</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 220px;" class="text-left"><span t-field="o.register_no"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Chassis No.</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.cc_vehicle.vin_sn"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Make/Model</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.cc_vehicle_model"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Kms</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.odometer"/></td>
+                                </tr>
+                               <tr>
+                                    <td style="width: 40px;" class="text-left"><b>Year</b></td>
+                                    <td style="width: 7px;" class="text-center"><b>:</b></td>
+                                    <td style="width: 150px;" class="text-left"><span t-field="o.year"/></td>
+                                </tr>
+                            </table>
+                       </div>
+                   </div>
+
+                   <!-- Customer Complaints -->
+                   <div t-if="o.description" style="border-top: 2px solid black;">
+                       <br/><b>Concerns &amp; Job Description:</b><br/>
+                       <span t-field="o.description"/>
+                   </div>
+
+                   <!-- Is there a discount on at least one line? -->
+                   <t t-set="total_discount" t-value="0"/>
+                   <t t-set="display_discount" t-value="any(l.discount for l in o.job_cost_sheet_ids)"/>
+
+                   <!-- Cost Sheet Lines -->
+                   <div style="height: 100%;">
+                       <t t-foreach="o.separate_cost_sheet_lines()" t-as="job_cost_sheet_lines">
+                       <t t-set="line_total_amount" t-value="0"/>
+                        <t t-foreach="job_cost_sheet_lines" t-as="job_cost_sheet_line">
+                            <div>
+                                <t t-if="len(job_cost_sheet_line) > 1">
+                                    <t t-if="job_cost_sheet_line[0].cost_type == 'material'">
+                                        <b>Parts</b><br/>
+                                    </t>
+                                    <t t-else="">
+                                        <b><t t-esc="job_cost_sheet_line[0].cost_type.title()"/></b><br/>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <t t-if="job_cost_sheet_line.cost_type == 'material'">
+                                        <b>Parts</b><br/>
+                                    </t>
+                                    <t t-else="">
+                                        <b><t t-esc="job_cost_sheet_line.cost_type.title()"/></b><br/>
+                                    </t>
+                                </t>
+                               <table style="width: 100%;">
+                                    <tr style="border-bottom: 1px solid black;">
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>S.No.</strong>
+                                        </td>
+                                        <td class="text-center">
+                                             <t t-if="len(job_cost_sheet_line) > 1">
+                                                 <t t-if="job_cost_sheet_line[0].cost_type == 'material'">
+                                                     <strong>Parts Description</strong>
+                                                 </t>
+                                                 <t t-else="">
+                                                    <strong><t t-esc="job_cost_sheet_line[0].cost_type"/> Description</strong>
+                                                 </t>
+                                             </t>
+                                             <t t-else="">
+                                                 <t t-if="job_cost_sheet_line[0].cost_type == 'material'">
+                                                    <strong>Parts Description</strong>
+                                                 </t>
+                                                  <t t-else="">
+                                                    <strong><t t-esc="job_cost_sheet_line.cost_type"/> Description</strong>
+                                                 </t>
+
+                                             </t>
+
+                                        </td>
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>QTY</strong>
+                                        </td>
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>VAT</strong>
+                                        </td>
+                                        <td style="width: 8%" class="text-center">
+                                            <strong>Rate</strong>
+                                        </td>
+                                        <td t-if="display_discount" style="width: 8%" class="text-center">
+                                            <strong>Discount</strong>
+                                        </td>
+                                        <td style="width: 18%" class="text-right">
+                                            <strong>Tax Amount</strong>
+                                        </td>
+                                        <td style="width: 18%" class="text-right">
+                                            <strong>Value AED</strong>
+                                        </td>
+                                    </tr>
+                                    <t t-set="count" t-value="0"/>
+                                   <t t-foreach="job_cost_sheet_line" t-as="cost_sheet_line">
+                                       <t t-if="cost_sheet_line.cc_check_box">
+                                        <t t-set="total_discount" t-value="cost_sheet_line.discount + total_discount"/>
+                                        <t t-set="line_total_amount" t-value="cost_sheet_line.price_subtotal + line_total_amount"/>
+                                        <tr>
+                                            <t t-set="count" t-value="count + 1"/>
+                                            <td style="width: 8%;" class="text-center">
+                                                <span t-esc="count"/>
+                                            </td>
+                                            <td class="text-left">
+                                                <span t-field="cost_sheet_line.name"/>
+                                            </td>
+                                            <td style="width: 8%" class="text-center">
+                                                <span t-field="cost_sheet_line.quantity"/>
+                                            </td>
+                                            <td style="width: 8%" class="text-center">
+                                                <span t-esc="', '.join(map(lambda x: (x.description or x.name), cost_sheet_line.invoice_line_tax_ids))"/>
+                                            </td>
+                                            <td style="width: 8%" class="text-center">
+                                                <span t-field="cost_sheet_line.price_unit"/>
+                                            </td>
+                                            <td t-if="display_discount" style="width: 8%" class="text-center">
+                                                <span t-field="cost_sheet_line.discount"/>
+                                            </td>
+                                            <td style="width: 18%" class="text-right">
+                                                <span t-esc="cost_sheet_line.tax_amount" t-options='{"widget": "float", "decimal_precision": "Product Price"}'/>
+                                            </td>
+                                            <td style="width: 18%;" class="text-right">
+                                                <span t-field="cost_sheet_line.price_subtotal"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                   </t>
+                                </table>
+                           </div>
+                        </t>
+                       <table style="width: 20%" class="text-right" align="right">
+                            <tr style="border-top: 1px solid black;">
+                                <td><b>Total:</b></td>
+                                <td><t t-esc="line_total_amount"/> <t t-esc="o.custom_currency_id.name"/> </td>
+                            </tr>
+                        </table>
+                       <br/>
+                   </t>
+                   </div>
+
+                   <!-- Total Amounts -->
+                   <t t-set="untaxed_amount" t-value="o.cost_sheet_amount_untaxed"/>
+                   <t t-set="amount_tax" t-value="o.cost_sheet_amount_tax"/>
+                   <t t-set="amount_total" t-value="o.cost_sheet_amount_total"/>
+                    <div style="height: 230px;">
+                        <p></p>
+                    </div>
+                   <div class="row" style="margin-top: 5%;">
+                       <div class="col-7 text-left">
+                           <p style="margin-bottom: 0px;">
+                               <b>Total Amount In Words:</b> <span t-field="o.num_word"/>
+                           </p>
+                       </div>
+                       <div class="col-5 text-right">
+                           <table style="border: 2px solid black; width:80%;" align="right">
+                               <tr style="border-bottom: 2px solid black;">
+                                   <td style="width: 18%"><b>Amount AED</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(untaxed_amount)" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                                <tr t-if="display_discount" style="border-bottom: 2px solid black;">
+                                    <td style="width: 18%"><b>Discount AED</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(total_discount)" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                                <tr style="border-bottom: 2px solid black;">
+                                    <td style="width: 18%"><b>5% VAT</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(amount_tax)" t-options="{'widget': 'float', 'precision': 2}"/> </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 18%"><b>Net Total AED</b></td>
+                                    <td style="width: 18%; padding-right: 3px;"><t t-esc="round(amount_total)" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                           </table>
+                       </div>
+                   </div>
+                   <div class="row" style="margin-left: 2px;">
+                       <t t-if="o.condition">
+                           <span t-field="o.condition"/>
+                       </t>
+                   </div>
+                   <div class="row" style="margin-top: 2%;">
+                       <div class="col-6">
+                           <table style="width:40%" align="left">
+                                <tr>
+                                    <td><b>Name:</b></td>
+                                    <td>............................................................</td>
+                                </tr>
+                           </table>
+                       </div>
+                       <div class="col-6">
+                          <table style="width:40%"  align="center">
+                            <tr>
+                                <td><b>Signature:</b></td>
+                                <td>............................................................</td>
+                            </tr>
+                          </table>
+                       </div>
+                   </div>
+               </div>
+           </t>
+         </t>
+       </t>
+    </template>
+
+</odoo>

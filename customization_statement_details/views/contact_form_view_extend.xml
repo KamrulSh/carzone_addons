@@ -1,0 +1,47 @@
+<odoo>
+	<record id="contact_form_view_extend" model="ir.ui.view">
+	    <field name="name">contact.form.view.extend</field>
+	    <field name="model">res.partner</field>
+	    <field name="inherit_id" ref="of_account_statement.view_partner_form_inherited_acc_state"/>
+	    <field name="arch" type="xml">
+			<xpath expr="//field[@name='cust_acc_stat_line_ids']/tree/field[@name='payment_state']" position="after">
+				<field name="project_name"/>
+                <field name="project_location"/>
+                <field name="client_lpo_no"/>
+			</xpath>
+			<xpath expr="//button[@name='action_cust_state_send']" position="after">
+				<group>
+					<field name="filter_date"/>
+					<field name="filter_date_to"/>
+					<field name="filter_project" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+					<div class="col-2">
+						<button name="clear_filter" type='object' string="Clear Filter" class="btn-primary"/>
+					</div>
+					<div class="col-2">
+						<button name="write_custom" type='object' string="Search" class="btn-primary"/>
+					</div>
+				</group>
+			</xpath>
+			<xpath expr="//field[@name='supp_acc_stat_line_ids']/tree/field[@name='state']" position="after">
+				<field name="project_name"/>
+                <field name="project_location"/>
+                <field name="client_lpo_no"/>
+			</xpath>
+			<xpath expr="//page[@name='supp_state']/h4" position="after">
+				<div class="oe_right">
+					<group>
+						<field name="vendor_filter_date"/>
+						<field name="vendor_filter_date_to"/>
+						<field name="vendor_filter_project" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+						<div class="col-2">
+							<button name="vendor_clear_filter" type='object' string="Clear Filter" class="btn-primary"/>
+						</div>
+						<div class="col-2">
+							<button name="write_custom" type='object' string="Search" class="btn-primary"/>
+						</div>
+					</group>
+				</div>
+			</xpath>
+        </field>
+    </record>
+</odoo>

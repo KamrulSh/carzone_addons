@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="client_lpo_no"/>
+                <field name="project_id"/>
+                <field name="project_ref"/>
+            </field>
+            <field name="partner_shipping_id" position="after">
+                <field name="items"/>
+            </field>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='sequence']" position="after">
+                <field name="freeze" string="Freeze" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
