@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_garage_booking_tree" model="ir.ui.view">
+            <field name="name">garage.booking.tree</field>
+            <field name="model">garage.booking</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="state == 'confirm'" decoration-danger="state == 'broadcast'">
+                    <field name="customer_name"/>
+                    <field name="customer_phone"/>
+                    <field name="customer_email"/>
+                    <field name="date_deadline"/>
+                    <field name="planned_date"/>
+                    <field name="vehicle_no"/>
+                    <field name="vehicle_model"/>
+                    <field name="chassis_no"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_garage_booking_form" model="ir.ui.view">
+            <field name="name">garage.booking.form</field>
+            <field name="model">garage.booking</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,broadcast"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="customer_name"/>
+                            <field name="customer_phone"/>
+                            <field name="customer_email"/>
+                            <field name="date_deadline"/>
+                            <field name="planned_date"/>
+                            <field name="vehicle_no"/>
+                            <field name="vehicle_model"/>
+                            <field name="chassis_no"/>
+                        </group>
+                        <group>
+                            <footer>
+                                <button name="action_confirm_booking" type="object" string="Confirm Booking"
+                                        class=" btn btn-success"
+                                        attrs="{'invisible': ['|', ('state', '=', 'confirm'), ('state', '=', 'broadcast')]}"/>
+                                <button name="action_broadcast" type="object" string="Broadcast"
+                                        class=" btn btn-danger"
+                                        attrs="{'invisible': ['|', ('state', '=', 'draft'),('state', '=', 'broadcast')]}"/>
+                            </footer>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_garage_booking" model="ir.actions.act_window">
+            <field name="name">Garage Booking</field>
+            <field name="res_model">garage.booking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create New Garage booking
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_garage_booking" name="Garage booking" sequence="10"
+                  action="action_garage_booking"
+                  web_icon="rt_broadcast_mgmt,static/description/icon.png"/>
+    </data>
+</odoo>

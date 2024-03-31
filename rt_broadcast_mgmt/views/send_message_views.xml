@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="mail_activity_inherited_tree_view" model="ir.ui.view">
+            <field name="name">mail.activity.view.tree.inherit</field>
+            <field name="model">mail.activity</field>
+            <field name="inherit_id" ref="rt_activity_mgmt.mail_activity_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='display_name']" position="before">
+                    <header>
+                        <button name="action_send_email_selected" type="object" string="Send Email"
+                                class=" btn btn-danger"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mail_activity_inherited_form_view" model="ir.ui.view">
+            <field name="name">mail.activity.view.form.inherit</field>
+            <field name="model">mail.activity</field>
+            <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
+            <field name="arch" type="xml">
+                <header>
+                    <button name="action_send_message_whatsapp" type="object" string="Send Whatsapp"
+                            class="btn btn-success"/>
+                    <button name="action_send_message_email" type="object" string="Send Email"
+                            class=" btn btn-danger"/>
+                </header>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="whatsapp_email_delivered_tree">
+            <field name="name">whatsapp.email.delivered.list</field>
+            <field name="model">whatsapp.email.delivered</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="customer_id"/>
+                    <field name="msg_type" widget="badge" decoration-danger="msg_type == 'email'"
+                           decoration-success="msg_type == 'whatsapp'"/>
+                    <field name="wapp_email"/>
+                    <field name="sent_date"/>
+                    <field name="state" widget="badge" decoration-success="state == 'planned'"
+                           decoration-danger="state == 'overdue'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_whatsapp_email_delivered" model="ir.actions.act_window">
+            <field name="name">Whatsapp/Email Delivered History</field>
+            <field name="res_model">whatsapp.email.delivered</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Show whatsapp/email delivered message information
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_whatsapp_email_delivered"
+                  parent="rt_activity_mgmt.menu_mail_activity_config"
+                  name="Delivered email/msg"
+                  action="action_whatsapp_email_delivered"
+                  sequence="2"/>
+    </data>
+</odoo>

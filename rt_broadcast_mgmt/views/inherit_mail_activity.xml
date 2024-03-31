@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_activity_form_inherit" model="ir.ui.view">
+        <field name="name">mail.activity.form.inherit</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
+        <field name="arch" type="xml">
+            <field name="activity_type_id" position="before">
+                <field name="partner_id"/>
+                <field name="contact"/>
+                <field name="email"/>
+                <field name="planned_date"/>
+            </field>
+            <field name="rt_activity_mgmt_tag_ids" position="after">
+                <field name="vehicle_model_id"/>
+                <field name="vehicle_type"/>
+                <field name="vehicle_color"/>
+                <field name="engine_no"/>
+                <field name="chassis_no"/>
+                <field name="license_plate"/>
+                <field name="last_odoo_meter_reading"/>
+                <field name="gear_type"/>
+                <field name="fuel_type"/>
+            </field>
+            <field name="res_model_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="res_model" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="activity_category" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="note" position="replace">
+                <notebook>
+                    <page string="Planned Details">
+                        <field name="whatsapp_data" nolabel="1" force_save="1"/>
+                    </page>
+                </notebook>
+            </field>
+        </field>
+    </record>
+
+    <record id="mail_activity_tree_inherit" model="ir.ui.view">
+        <field name="name">mail.activity.tree.inherit</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="rt_activity_mgmt.mail_activity_tree"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="before">
+                <field name="partner_id" optional="show"/>
+                <field name="email" optional="hide"/>
+                <field name="contact" optional="show"/>
+                <field name="vehicle_model_id" optional="show"/>
+                <field name="vehicle_type" optional="hide"/>
+                <field name="vehicle_color" optional="hide"/>
+                <field name="engine_no" optional="hide"/>
+                <field name="chassis_no" optional="hide"/>
+                <field name="license_plate" optional="show"/>
+                <field name="last_odoo_meter_reading" optional="hide"/>
+            </field>
+            <field name="date_deadline" position="after">
+                <field name="planned_date" optional="show"/>
+            </field>
+            <field name="res_model_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="res_name" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="rt_activity_mgmt_tag_ids" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="inherited_mail_activity_search" model="ir.ui.view">
+        <field name="name">mail.activity.search.inherit</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="rt_activity_mgmt.mail_activity_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="partner_id" string="Customer"/>
+                <field name="last_odoo_meter_reading" string="Odoo Meter Reading"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mail_activity_kanban" model="ir.ui.view">
+        <field name="name">mail.activity.kanban</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="rt_activity_mgmt.mail_activity_kanban"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="before">
+                <field name="partner_id"/>
+                <field name="planned_date"/>
+                <field name="last_odoo_meter_reading"/>
+            </field>
+            <xpath expr="//div[@class='o_kanban_record_subtitle']" position="replace">
+                <div class="o_kanban_record_subtitle">
+                    <strong>Activity type:</strong>
+                    <span t-attf-class="mr-2 rt_activity_mgmt_activity_color_#{record.state.raw_value}" class="mr-2">
+                        <i t-attf-class="fa #{record.icon.value}"/>
+                    </span>
+                    <br/>
+                    <strong>Customer:</strong>
+                    <span>
+                        <field name="partner_id"/>
+                    </span>
+                    <br/>
+                    <strong>Vehicle Model:</strong>
+                    <span>
+                        <field name="vehicle_model_id"/>
+                    </span>
+                    <br/>
+                    <strong>License Plate:</strong>
+                    <span>
+                        <field name="license_plate"/>
+                    </span>
+                    <br/>
+                    <strong>Planned on:</strong>
+                    <span t-attf-class="rt_activity_mgmt_activity_color_#{record.state.raw_value}">
+                        <field name="planned_date"/>
+                    </span>
+                    <br/>
+                    <strong>Due on:</strong>
+                    <span t-attf-class="rt_activity_mgmt_activity_color_#{record.state.raw_value}">
+                        <field name="date_deadline"/>
+                    </span>
+                    <br/>
+                    <strong>Deadline:</strong>
+                    <span t-attf-class="font-weight-bold rt_activity_mgmt_activity_color_#{record.state.raw_value}">
+                        <field name="date_deadline" widget="remaining_days"/>
+                    </span>
+                    <br/>
+                    <strong>Assigned to:</strong>
+                    <field name="user_id"/>
+                    <field name="user_id" widget="many2one_avatar_user"/>
+                    <br/>
+                    <strong>Last Odoo Meter Reading:</strong>
+                    <field name="last_odoo_meter_reading"/>
+                    <br/>
+                    <strong>Created on:</strong>
+                    <field name="create_date"/>
+                    <br/>
+                    <strong>Created by:</strong>
+                    <field name="create_uid"/>
+                    <field name="create_uid" widget="many2one_avatar_user"/>
+                    <br/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mail_activity_calendar_inherit" model="ir.ui.view">
+        <field name="name">mail.activity.calendar</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="rt_activity_mgmt.mail_activity_calendar"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="before">
+                <field name="partner_id"/>
+            </field>
+
+        </field>
+    </record>
+
+</odoo>

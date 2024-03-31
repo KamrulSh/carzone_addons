@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="menu_garage_booking_form" model="website.menu">
+        <field name="name">Garage booking</field>
+        <field name="url">/booking_form</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">55</field>
+    </record>
+
+    <template id="garage_booking_form" name="Garage booking">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <div class="container">
+                        <form role="form" action="/create/booking" method="POST">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="form-group">
+                                <br/>
+                                <label for="customer_name" class="control-label">Name</label>
+                                <input type="text" name="customer_name" t-att-value="customer_name"
+                                       id="customer_name" class="form-control" placeholder="e.g. Enter name"
+                                       required="required"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="customer_phone" class="control-label">Phone</label>
+                                <input type="tel" name="customer_phone" id="customer_phone" class="form-control"
+                                       placeholder="e.g. +671 123 456 789" required="required"
+                                       pattern="[+]{0,1}[0-9]+[\\s/0-9]*" title="Please enter a valid phone number"/>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="customer_email" class="control-label">Email</label>
+                                <input type="email" name="customer_email" t-att-value="customer_email"
+                                       id="customer_email" class="form-control"/>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="date_deadline" class="control-label">Booking date</label>
+                                <input type="date" name="date_deadline" t-att-value="date_deadline"
+                                       id="date_deadline" class="form-control"/>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="vehicle_no" class="control-label">Vehicle No</label>
+                                <input type="text" name="vehicle_no" t-att-value="vehicle_no"
+                                       id="vehicle_no" class="form-control"/>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="vehicle_model" class="control-label">Vehicle Model</label>
+                                <input type="text" name="vehicle_model" t-att-value="vehicle_model"
+                                       id="vehicle_model" class="form-control"/>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="chassis_no" class="control-label">Chassis No</label>
+                                <input type="text" name="chassis_no" t-att-value="chassis_no"
+                                       id="chassis_no" class="form-control"/>
+                            </div>
+
+                            <div class="clearfix oe_login_buttons">
+                                <button type="submit" class="btn btn-primary pull-left">Submit</button>
+                            </div>
+                            <br/>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="user_thanks" model="website.page">
+        <field name="name">Thanks</field>
+        <field name="type">qweb</field>
+        <field name="url">/user-thanks</field>
+        <field name="website_published">True</field>
+        <field name="key">rt_broadcast_mgmt.user_thanks</field>
+        <field name="arch" type="xml">
+            <t name="Thanks" t-name="rt_broadcast_mgmt.user_thanks">
+                <t t-call="website.layout">
+                    <div id="wrap">
+                        <div class="container">
+                            <h1>Thanks!</h1>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="alert alert-success" role="status">Your booking has been submitted
+                                        successfully.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+</odoo>
