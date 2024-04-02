@@ -9,6 +9,7 @@
                     <field name="customer_name"/>
                     <field name="customer_phone"/>
                     <field name="customer_email"/>
+                    <field name="booking_date"/>
                     <field name="date_deadline"/>
                     <field name="planned_date"/>
                     <field name="vehicle_no"/>
@@ -25,28 +26,31 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,broadcast"/>
+                        <button name="action_confirm_booking" type="object"
+                                string="Check customer and Confirm Booking" class=" btn btn-success"
+                                attrs="{'invisible': ['|', '|', ('state', '=', 'confirm'), ('state', '=', 'fleet'), ('state', '=', 'broadcast')]}"/>
+                        <button name="action_create_fleet" type="object" string="Create fleet"
+                                class=" btn btn-warning"
+                                attrs="{'invisible': ['|', '|', '&amp;', ('state', '=', 'draft'), ('state', '=', 'confirm'), ('state', '=', 'broadcast'), ('is_new_customer', '=', 'No')]}"/>
+                        <button name="action_broadcast" type="object" string="Broadcast"
+                                class=" btn btn-danger"
+                                attrs="{'invisible': ['|', ('state', '=', 'draft'), ('state', '=', 'broadcast')]}"/>
+                        <button name="action_send_message" type="object" string="Send Message"
+                                class=" btn btn-success"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,fleet,broadcast"/>
                     </header>
                     <sheet>
                         <group>
+                            <field name="is_new_customer"/>
                             <field name="customer_name"/>
                             <field name="customer_phone"/>
                             <field name="customer_email"/>
+                            <field name="booking_date"/>
                             <field name="date_deadline"/>
                             <field name="planned_date"/>
                             <field name="vehicle_no"/>
                             <field name="vehicle_model"/>
                             <field name="chassis_no"/>
-                        </group>
-                        <group>
-                            <footer>
-                                <button name="action_confirm_booking" type="object" string="Confirm Booking"
-                                        class=" btn btn-success"
-                                        attrs="{'invisible': ['|', ('state', '=', 'confirm'), ('state', '=', 'broadcast')]}"/>
-                                <button name="action_broadcast" type="object" string="Broadcast"
-                                        class=" btn btn-danger"
-                                        attrs="{'invisible': ['|', ('state', '=', 'draft'),('state', '=', 'broadcast')]}"/>
-                            </footer>
                         </group>
                     </sheet>
                 </form>
