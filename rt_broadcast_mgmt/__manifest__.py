@@ -22,6 +22,7 @@
         'views/garage_booking_views.xml',
         'views/send_message_views.xml',
         'views/broadcast_whatsapp_text.xml',
+        'views/booking_whatsapp_text.xml',
         'views/inherit_mail_activity.xml',
     ],
     'external_dependencies': {

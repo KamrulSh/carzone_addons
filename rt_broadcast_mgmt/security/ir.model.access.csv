@@ -4,3 +4,4 @@ access_garage_booking,garage.booking,model_garage_booking,base.group_user,1,1,1,
 access_mail_activity_user,mail.activity.user,mail.model_mail_activity,base.group_user,1,1,1,1
 access_activity_general_user,activity.general.user,model_activity_general,base.group_user,1,1,1,1
 access_broadcast_whatsapp_text,broadcast.whatsapp.text.user,model_broadcast_whatsapp_text,base.group_user,1,1,1,1
+access_booking_whatsapp_text,booking.whatsapp.text.user,model_booking_whatsapp_text,base.group_user,1,1,1,1

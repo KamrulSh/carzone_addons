@@ -12,6 +12,7 @@
             <div id="wrap">
                 <div class="oe_structure">
                     <div class="container">
+                        <h2 style="margin-top: 20px; text-align: center;">Book an appointment</h2>
                         <form role="form" action="/create/booking" method="POST">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <div class="form-group">
@@ -29,31 +30,35 @@
                                        pattern="[+]{0,1}[0-9]+[\\s/0-9]*" title="Please enter a valid phone number"/>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="customer_email" class="control-label">Email</label>
                                 <input type="email" name="customer_email" t-att-value="customer_email"
+                                       placeholder="e.g. customer@email.com"
                                        id="customer_email" class="form-control"/>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="booking_date" class="control-label">Booking date</label>
                                 <input type="date" name="booking_date" t-att-value="booking_date"
                                        id="booking_date" class="form-control"/>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="vehicle_no" class="control-label">Vehicle License No</label>
                                 <input type="text" name="vehicle_no" t-att-value="vehicle_no"
                                        id="vehicle_no" class="form-control"/>
                             </div>
 
-                            <div class="form-group ">
-                                <label for="vehicle_model" class="control-label">Vehicle Model</label>
-                                <input type="text" name="vehicle_model" t-att-value="vehicle_model"
-                                       id="vehicle_model" class="form-control"/>
+                            <div class="form-group">
+                                <label for="vehicle_model_id" class="control-label">Vehicle Model</label>
+                                <select name="vehicle_model_id" class="form-control link-style">
+                                    <t t-foreach='vehicle_model_rec' t-as="vehicle">
+                                        <option t-esc='vehicle.name' t-att-value='vehicle.id'/>
+                                    </t>
+                                </select>
                             </div>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label for="chassis_no" class="control-label">Chassis No</label>
                                 <input type="text" name="chassis_no" t-att-value="chassis_no"
                                        id="chassis_no" class="form-control"/>

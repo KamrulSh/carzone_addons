@@ -23,6 +23,18 @@ class MailActivity(models.Model):
     gear_type = fields.Char(string="Gear Type")
     fuel_type = fields.Char(string="Fuel Type")
 
+    @api.model
+    def create(self, vals):
+        res = super(MailActivity, self).create(vals)
+        active_id = self.env.context.get('active_id')
+        booking_mode = self.env.context.get('status')
+        booking_id = self.env['garage.booking'].browse(active_id)
+        if booking_mode == 'fleet':
+            booking_id.write({
+                'state': 'broadcast',
+            })
+        return res
+
     # TODO: Need to modify for multiple vehicles for a single customer
     @api.onchange("partner_id")
     def onchange_partner_vehicle_data(self):
@@ -56,27 +68,32 @@ class MailActivity(models.Model):
         company_name = self.env.company.name
         company_phone = self.env.company.phone
         for rec in self:
-            rec.whatsapp_data = self.env['broadcast.whatsapp.text'].search([], limit=1).text
-            if rec.whatsapp_data:
-                rec.whatsapp_data = rec.whatsapp_data % {'customer': rec.partner_id.name,
-                                                         'vehicle_model': rec.vehicle_model_id.name,
-                                                         'vehicle_type': rec.vehicle_type,
-                                                         'vehicle_color': rec.vehicle_color,
-                                                         'engine_no': rec.engine_no,
-                                                         'chassis_no': rec.chassis_no,
-                                                         'license_plate': rec.license_plate,
-                                                         'gear_type': rec.gear_type,
-                                                         'fuel_type': rec.fuel_type,
-                                                         'odoo_meter': rec.last_odoo_meter_reading,
-                                                         'due_date': str(rec.date_deadline),
-                                                         'planned_date': str(rec.planned_date),
-                                                         'company_name': company_name,
-                                                         'company_phone': company_phone}
+            whatsapp_template = self.env['broadcast.whatsapp.text'].search([], limit=1).text
+            if whatsapp_template:
+                formatted_whatsapp_data = whatsapp_template.format(
+                    customer=rec.partner_id.name,
+                    vehicle_model=rec.vehicle_model_id.name or '',
+                    vehicle_type=rec.vehicle_type or '',
+                    vehicle_color=rec.vehicle_color or '',
+                    engine_no=rec.engine_no or '',
+                    chassis_no=rec.chassis_no or '',
+                    license_plate=rec.license_plate or '',
+                    gear_type=rec.gear_type or '',
+                    fuel_type=rec.fuel_type or '',
+                    odoo_meter=rec.last_odoo_meter_reading or '',
+                    due_date=str(rec.date_deadline) or '',
+                    planned_date=str(rec.planned_date) or '',
+                    company_name=company_name or '',
+                    company_phone=company_phone or ''
+                )
+                rec.whatsapp_data = formatted_whatsapp_data
                 rec.note = rec.whatsapp_data
 
 
 class ActivityGeneral(models.Model):
     _name = 'activity.general'
+    _description = 'Activity General'
+    _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char('Name')
