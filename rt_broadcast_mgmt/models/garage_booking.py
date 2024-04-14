@@ -9,25 +9,30 @@ class GarageBooking(models.Model):
     _description = 'Garage Booking'
     _rec_name = 'customer_name'
     _order = 'create_date desc'
+    _inherit = ['mail.thread']
 
-    customer_name = fields.Char(string='Customer Name', required=True)
-    customer_email = fields.Char(string='Customer Email', required=True)
-    customer_phone = fields.Char(string='Customer Phone', required=True)
-    booking_date = fields.Date(string='Booking Date')
-    date_deadline = fields.Date(string='Date Deadline')
-    planned_date = fields.Date(string='Planned Date')
-    vehicle_no = fields.Char(string='Vehicle License No', required=True)
-    vehicle_model_id = fields.Many2one('fleet.vehicle.model', string='Vehicle Model')
-    chassis_no = fields.Char(string='Chassis No')
+    customer_name = fields.Char(string='Customer Name', required=True, tracking=True)
+    customer_email = fields.Char(string='Customer Email', required=True, tracking=True)
+    customer_phone = fields.Char(string='Customer Phone', required=True, tracking=True)
+    booking_date = fields.Date(string='Booking Date', tracking=True)
+    date_deadline = fields.Date(string='Date Deadline', tracking=True)
+    planned_date = fields.Date(string='Planned Date', tracking=True)
+    vehicle_no = fields.Char(string='Vehicle License No', required=True, tracking=True)
+    vehicle_brand_id = fields.Many2one('fleet.vehicle.model.brand', string='Vehicle Brand', tracking=True)
+    vehicle_model_id = fields.Many2one('fleet.vehicle.model', string='Vehicle Model', tracking=True)
+    chassis_no = fields.Char(string='Chassis No', tracking=True)
     state = fields.Selection(
         [('draft', 'Draft'), ('confirm', 'Confirm'), ('fleet', 'Fleet'), ('broadcast', 'Broadcast')],
         string='Status', default='draft')
     is_new_customer = fields.Char(string='Is New Customer', readonly=True, store=True)
-    whatsapp_data = fields.Html(string="Whatsapp Details")
+    whatsapp_data = fields.Html(string="Whatsapp Details", tracking=True)
 
     def action_confirm_booking(self):
         self.write({'state': 'confirm'})
         customer_vehicle = self.env['fleet.vehicle'].search([('license_plate', '=', self.vehicle_no)], limit=1)
+        self.env['mail.message'].create(
+            {'body': 'Booking confirmed.', 'message_type': 'comment',
+             'model': 'garage.booking', 'res_id': self.id})
         if customer_vehicle:
             self.is_new_customer = 'No'
 
@@ -105,13 +110,14 @@ class GarageBooking(models.Model):
         }
 
     def action_send_message(self):
-        customer_id = self.env['res.partner'].search([('phone', '=', self.customer_phone)])
-        phone_no = self.customer_phone.replace(" ", "").replace("-", "")
-        txt_msg = html2text.html2text(self.whatsapp_data)
-        if not phone_no:
+        customer_id = self.env['res.partner'].search(
+            [('phone', '=', self.customer_phone), ('email', '=', self.customer_email)], limit=1)
+        if not self.customer_phone:
             raise ValidationError(_('Please add phone number to this customer.'))
 
         else:
+            phone_no = self.customer_phone.replace(" ", "").replace("-", "")
+            txt_msg = html2text.html2text(self.whatsapp_data)
             data_vals = {
                 'msg_type': 'whatsapp',
                 'customer_id': customer_id.id,
@@ -120,6 +126,9 @@ class GarageBooking(models.Model):
                 'sent_date': fields.Datetime.now(),
             }
             self.env['whatsapp.email.delivered'].create(data_vals)
+            self.env['mail.message'].create(
+                {'body': f'Whatsapp Message sent to {self.customer_phone}', 'message_type': 'comment',
+                 'model': 'garage.booking', 'res_id': self.id})
             link = "https://web.whatsapp.com/send?phone=" + phone_no
             message_string = parse.quote(txt_msg)
 

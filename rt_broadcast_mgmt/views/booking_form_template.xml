@@ -50,6 +50,15 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="vehicle_brand_id" class="control-label">Vehicle Brand</label>
+                                <select name="vehicle_brand_id" class="form-control link-style">
+                                    <t t-foreach='vehicle_brand_rec' t-as="brand">
+                                        <option t-esc='brand.name' t-att-value='brand.id'/>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="vehicle_model_id" class="control-label">Vehicle Model</label>
                                 <select name="vehicle_model_id" class="form-control link-style">
                                     <t t-foreach='vehicle_model_rec' t-as="vehicle">

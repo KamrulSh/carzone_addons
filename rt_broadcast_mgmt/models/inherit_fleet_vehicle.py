@@ -14,4 +14,8 @@ class InheritFleetVehicle(models.Model):
             booking_id.write({
                 'state': 'fleet',
             })
+        print(self.id)
+        self.env['mail.message'].create(
+            {'body': 'Fleet data created.', 'message_type': 'comment',
+             'model': 'garage.booking', 'res_id': active_id})
         return res

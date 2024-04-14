@@ -2,26 +2,29 @@ from odoo import models, fields, api
 
 
 class MailActivity(models.Model):
-    _inherit = "mail.activity"
+    _name = 'mail.activity'
+    _inherit = ['mail.activity', 'mail.thread']
 
-    partner_id = fields.Many2one("res.partner", string="Customer", required=True)
-    contact = fields.Char(related="partner_id.phone", string="Phone No.")
-    email = fields.Char(related="partner_id.email", string="Email")
-    planned_date = fields.Date(string="Planned Date")
+    partner_id = fields.Many2one("res.partner", string="Customer", required=True, tracking=True)
+    contact = fields.Char(related="partner_id.phone", string="Phone No.", tracking=True)
+    email = fields.Char(related="partner_id.email", string="Email", tracking=True)
+    planned_date = fields.Date(string="Planned Date", tracking=True)
     res_model_id = fields.Many2one('ir.model', 'Document Model', index=True, ondelete='cascade', required=True,
                                    default=lambda self: self.env.ref('rt_broadcast_mgmt.model_activity_general'))
     res_id = fields.Many2oneReference(string='Related Document ID', index=True, required=True, model_field='res_model',
                                       default=lambda self: self.env.ref('rt_broadcast_mgmt.general_activities'))
-    whatsapp_data = fields.Html(string="Whatsapp Details")
-    vehicle_model_id = fields.Many2one("fleet.vehicle.model", string="Vehicle Model")
-    vehicle_type = fields.Char(string="Vehicle Type")
-    vehicle_color = fields.Char(string="Vehicle Color")
-    engine_no = fields.Char(string="Engine No.")
-    chassis_no = fields.Char(string="Chassis No.")
-    license_plate = fields.Char(string="License Plate")
-    last_odoo_meter_reading = fields.Char(string="Odoo meter reading")
-    gear_type = fields.Char(string="Gear Type")
-    fuel_type = fields.Char(string="Fuel Type")
+    whatsapp_data = fields.Html(string="Whatsapp Details", tracking=True)
+    vehicle_model_id = fields.Many2one("fleet.vehicle.model", string="Vehicle Model", tracking=True)
+    vehicle_type = fields.Char(string="Vehicle Type", tracking=True)
+    vehicle_color = fields.Char(string="Vehicle Color", tracking=True)
+    engine_no = fields.Char(string="Engine No.", tracking=True)
+    chassis_no = fields.Char(string="Chassis No.", tracking=True)
+    license_plate = fields.Char(string="License Plate", tracking=True)
+    last_odoo_meter_reading = fields.Char(string="Odoo meter reading", tracking=True)
+    gear_type = fields.Char(string="Gear Type", tracking=True)
+    fuel_type = fields.Char(string="Fuel Type", tracking=True)
+    broadcasting_summary = fields.Text(tracking=True)
+    date_deadline = fields.Date(tracking=True)
 
     @api.model
     def create(self, vals):
@@ -33,6 +36,9 @@ class MailActivity(models.Model):
             booking_id.write({
                 'state': 'broadcast',
             })
+        self.env['mail.message'].create(
+            {'body': 'Broadcast data added.', 'message_type': 'comment',
+             'model': 'garage.booking', 'res_id': active_id})
         return res
 
     # TODO: Need to modify for multiple vehicles for a single customer

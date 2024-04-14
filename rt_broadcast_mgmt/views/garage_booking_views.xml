@@ -37,7 +37,7 @@
                                 attrs="{'invisible': ['|', '|', ('state', '=', 'draft'), ('is_new_customer', '=', 'No'), '&amp;', ('is_new_customer', '=', 'Yes'), '|', ('state', '=', 'fleet'), ('state', '=', 'broadcast')]}"/>
                         <button name="action_broadcast" type="object" string="Broadcast"
                                 class=" btn btn-danger"
-                                attrs="{'invisible': ['|', ('state', '=', 'draft'), ('state', '=', 'broadcast')]}"/>
+                                attrs="{'invisible': ['|', '|', ('state', '=', 'draft'), '&amp;', ('is_new_customer', '=', 'Yes'), ('state', '=', 'confirm'), ('state', '=', 'broadcast')]}"/>
                         <button name="action_send_message" type="object" string="Send Message"
                                 class=" btn btn-success"
                                 attrs="{'invisible': ['|', ('state', '=', 'draft'), ('state', '=', 'broadcast')]}"/>
@@ -57,6 +57,7 @@
                                 <field name="date_deadline"/>
                                 <field name="planned_date"/>
                                 <field name="vehicle_no"/>
+                                <field name="vehicle_brand_id"/>
                                 <field name="vehicle_model_id"/>
                                 <field name="chassis_no"/>
                             </group>
@@ -67,6 +68,10 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>

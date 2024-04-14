@@ -83,12 +83,12 @@ class InheritedMailActivity(models.Model):
         }
 
     def action_send_message_whatsapp(self):
-        phone_no = self.contact.replace(" ", "").replace("-", "")
-        txt_msg = html2text.html2text(self.whatsapp_data)
-        if not phone_no:
+        if not self.contact:
             raise ValidationError(_('Please add phone number to this customer.'))
 
         else:
+            phone_no = self.contact.replace(" ", "").replace("-", "")
+            txt_msg = html2text.html2text(self.whatsapp_data)
             data_vals = {
                 'msg_type': 'whatsapp',
                 'customer_id': self.partner_id.id,
@@ -98,6 +98,9 @@ class InheritedMailActivity(models.Model):
                 'state': self.state
             }
             self.env['whatsapp.email.delivered'].create(data_vals)
+            self.env['mail.message'].create(
+                {'body': f'Whatsapp Message sent to {self.contact}', 'message_type': 'comment',
+                 'model': 'mail.activity', 'res_id': self.id})
             link = "https://web.whatsapp.com/send?phone=" + phone_no
             message_string = parse.quote(txt_msg)
 
@@ -125,6 +128,9 @@ class InheritedMailActivity(models.Model):
             'state': self.state
         }
         self.env['whatsapp.email.delivered'].create(data_vals)
+        self.env['mail.message'].create(
+            {'body': f'Email sent to {self.email}', 'message_type': 'comment',
+             'model': 'mail.activity', 'res_id': self.id})
 
         email_vals = {
             'subject': 'Do maintenance of your vehicle with us',
